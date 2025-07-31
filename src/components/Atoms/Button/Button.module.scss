@@ -1,0 +1,69 @@
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+
+.button {
+    font-weight: 500;
+    border: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    line-height: 1.5;
+    letter-spacing: 0.05em;
+    transition: all 0.4s;
+    position: relative;
+    font-size: 1.6rem;
+    max-height: 64px;
+    width: 100%;
+    border-radius: 4px;
+    &:hover {
+        .postfix_icon {
+            padding-right: 0;
+        }
+    }
+}
+
+.prefix_icon {
+    transition: all 0.4s;
+    display: flex;
+    align-items: center;
+}
+
+.postfix_icon {
+    padding-right: 5px;
+    transition: all 0.4s;
+    display: flex;
+    align-items: center;
+}
+
+// Type
+.primary {
+    color: $black-01;
+    background: $white-01;
+    &:hover {
+        color: $white-01;
+        background: $black-01;
+    }
+}
+
+.secondary {
+    color: $black-01;
+    border: 1px solid $orange-01;
+    &:hover {
+        background: $orange-01;
+    }
+}
+
+.tertiary {
+    color: $white-01;
+    background: $black-01;
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}

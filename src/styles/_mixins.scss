@@ -1,0 +1,50 @@
+@use "sass:map";
+
+@mixin sp() {
+  @media screen and (max-width: 767px) {
+    @content;
+  }
+}
+
+@mixin tab() {
+  @media screen and (min-width: 768px) and (max-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin pc() {
+  @media screen and (min-width: 1025px) {
+    @content;
+  }
+}
+
+@mixin media($keys...) {
+  @each $key in $keys {
+    @if ($key == sp) {
+      @include sp {
+        @content;
+      }
+    } @else if ($key == tab) {
+      @include tab {
+        @content;
+      }
+    } @else if ($key == pc) {
+      @include pc {
+        @content;
+      }
+    } @else if (map.get($key, "min-width") or map.get($key, "max-width")) {
+      $query: "screen";
+
+      @if (map.get($key, "min-width")) {
+        $query: $query + " and (min-width: " + map.get($key, "min-width") + ")";
+      }
+      @if (map.get($key, "max-width")) {
+        $query: $query + " and (max-width: " + map.get($key, "max-width") + ")";
+      }
+
+      @media #{$query} {
+        @content;
+      }
+    }
+  }
+}

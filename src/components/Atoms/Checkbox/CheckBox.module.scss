@@ -1,0 +1,69 @@
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+
+.checkbox_label {
+    position: relative;
+    padding: 5px 0;
+    margin-right: 30px;
+    font-weight: 600;
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+    outline: none;
+    &:hover {
+        &::before {
+            opacity: 0.6;
+            // background: url(/img/common/checkbox.png);
+            background-size: cover;
+            // border: none;
+        }
+    }
+    &:last-child {
+        margin-right: 0;
+    }
+    input[type="checkbox"] {
+        opacity: 0;
+        position: absolute;
+        outline: none;
+        display: inline-block;
+        vertical-align: middle;
+        cursor: pointer;
+        outline: none;
+    }
+
+    &:before {
+        content: "";
+        background: $white-01;
+        border: 2px solid $black-01;
+        border-radius: 2px;
+        display: inline-block;
+        vertical-align: middle;
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+        margin-bottom: 3px;
+        text-align: center;
+    }
+}
+
+.check:before {
+    content: "";
+    background: url(/img/common/checkbox.png);
+    background-size: cover;
+    border: none;
+    border-width: 0;
+    width: 20px;
+    height: 20px;
+    top: 0;
+    left: 0;
+}
+
+.disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+    color: $gray-01;
+    &::before {
+        background: $gray-01;
+        border: none;
+    }
+}

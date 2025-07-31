@@ -1,0 +1,32 @@
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+
+.para_text_1,
+.para_text_2,
+.para_text_3,
+.para_text_4,
+.para_text_5,
+.para_text_6 {
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 0.05em;
+}
+
+.para_text_1 {
+    font-size: 2rem;
+}
+.para_text_2 {
+    font-size: 1.8rem;
+}
+.para_text_3 {
+    font-size: 1.6rem;
+}
+.para_text_4 {
+    font-size: 1.4rem;
+}
+.para_text_5 {
+    font-size: 1.2rem;
+}
+.para_text_6 {
+    font-size: 1rem;
+}

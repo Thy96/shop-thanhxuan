@@ -1,0 +1,18 @@
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+
+.form_item {
+    margin-bottom: 15px;
+    width: 100%;
+    .error_placeholder {
+        &::placeholder {
+            color: $red-01 !important;
+            opacity: 0.5;
+        }
+    }
+    .error {
+        color: $red-01;
+        font-style: italic;
+        margin: 5px;
+    }
+}

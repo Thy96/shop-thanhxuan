@@ -1,0 +1,150 @@
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+
+.wrapper {
+  display: flex;
+
+  @include tab {
+    display: block;
+  }
+
+  @include sp {
+    display: block;
+  }
+
+  .ft_img,
+  .footer {
+    width: 50%;
+    overflow: hidden;
+
+    @include tab {
+      width: 100%;
+    }
+
+    @include sp {
+      width: 100%;
+    }
+  }
+
+  .ft_img {
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .footer {
+    &_top {
+      padding: 60px 100px;
+
+      @include tab {
+        padding: 20px;
+      }
+
+      @include sp {
+        padding: 20px;
+      }
+      .title {
+        font-family: $font-vollkorn;
+        margin-bottom: 30px;
+
+        @include sp {
+          line-height: 1.2;
+          font-size: 2.6rem;
+          letter-spacing: 1px;
+        }
+      }
+
+      .email {
+        margin-bottom: 40px;
+
+        &_warpper {
+          margin-bottom: 10px;
+          @include sp {
+            padding-left: 0;
+          }
+        }
+        &_input {
+          &::placeholder {
+            color: $orange-03;
+          }
+        }
+
+        &_description {
+          color: $orange-04;
+          font-style: italic;
+          font-weight: normal;
+          @include sp {
+            font-size: 1.2rem;
+          }
+        }
+      }
+
+      .service {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+
+        &_list {
+          li {
+            margin-top: 12px;
+            font-weight: normal;
+            &:first-child {
+              font-weight: bold;
+            }
+            a {
+              &:hover {
+                text-decoration: underline;
+              }
+              @include sp {
+                font-size: 1.4rem;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &_bottom {
+      padding: 30px 100px;
+      background: $grown-02;
+      color: $white-01;
+
+      @include sp {
+        padding: 20px;
+      }
+      .content {
+        margin-bottom: 20px;
+        font-family: $font-barlow-condensed;
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        h3 {
+          margin-bottom: 10px;
+          font-size: 1.8rem;
+          color: $orange-03;
+          font-weight: bold;
+        }
+
+        p {
+          font-weight: normal;
+          color: $orange-03;
+          line-height: 1.6;
+        }
+      }
+
+      .ministry_of_industry {
+        margin-bottom: 20px;
+      }
+
+      .copyright {
+        p {
+          color: $gray-01;
+          font-weight: normal;
+        }
+      }
+    }
+  }
+}

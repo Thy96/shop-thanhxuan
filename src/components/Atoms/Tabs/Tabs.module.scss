@@ -1,0 +1,96 @@
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+
+.wrapper {
+    display: flex;
+    @include sp {
+        flex-wrap: wrap;
+    }
+    .tabs {
+        width: 20%;
+        @include sp {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        .tab {
+            width: 100%;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.4s;
+            border: 1px solid $orange-03;
+            border-top: none;
+            border-bottom: none;
+            border-right: none;
+            padding: 10px 10px 0;
+            cursor: pointer;
+            position: relative;
+            @include sp {
+                border: none !important;
+                width: 100%;
+                padding: 5px !important;
+            }
+            &::after {
+                position: absolute;
+                content: "";
+                width: 5px;
+                height: 100%;
+                top: 0;
+                right: -2px;
+                background: $orange-02;
+                @include sp {
+                    display: none;
+                }
+            }
+            &:first-child {
+                border-top: 1px solid $orange-03;
+                border-top-left-radius: 6px;
+                padding-top: 20px;
+            }
+            &:last-child {
+                border-bottom: 1px solid $orange-03;
+                border-bottom-left-radius: 6px;
+                padding-bottom: 20px;
+            }
+            .tab_panel {
+                background: $orange-01;
+                text-align: center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 5px 10px;
+                transition: 0.4s;
+                border-radius: 6px;
+                width: 100%;
+                height: 50px;
+                @include sp {
+                    width: 170px;
+                }
+                &:hover {
+                    background: $orange-03;
+                    color: $white-01;
+                }
+            }
+            .active {
+                color: $white-01;
+                background: $orange-03;
+            }
+        }
+    }
+    .content {
+        width: 80%;
+        border: 1px solid $orange-03;
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
+        padding: 20px;
+        @include sp {
+            margin-top: 10px;
+            width: 100%;
+            border: none;
+        }
+    }
+}

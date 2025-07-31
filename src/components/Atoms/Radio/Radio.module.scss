@@ -1,0 +1,78 @@
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+
+.input_style {
+    cursor: pointer;
+    font-size: 1.6rem;
+    font-weight: bold;
+    line-height: 1.6;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: $black-01;
+    margin-bottom: 16px;
+    padding: 11px 16px;
+    border-radius: 8px;
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    input {
+        appearance: none;
+        position: relative;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        &::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-color: $white-01;
+            border: 2px solid $gray-01;
+            border-radius: 50%;
+        }
+
+        &::after {
+            content: "";
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        &:checked {
+            &::before {
+                border: 2px solid $black-01;
+            }
+            &::after {
+                display: block;
+                background-color: $black-01;
+            }
+        }
+    }
+}
+
+.active {
+    // background: $bluegray-01;
+    color: $black-01;
+}
+
+.disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+    color: $gray-01;
+    input {
+        &::before {
+            background: $gray-01;
+            border: none !important;
+        }
+        &::after {
+            background: $gray-01 !important;
+        }
+    }
+}

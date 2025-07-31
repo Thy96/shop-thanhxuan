@@ -1,0 +1,188 @@
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+
+.marquee {
+  padding: 10px 0;
+  @include tab {
+    padding: 20px 0;
+  }
+  img {
+    height: 100%;
+    width: 2954px;
+    @include tab {
+      width: 1200px;
+    }
+  }
+}
+.gsap_wrapper {
+  .title {
+    position: absolute;
+    left: 100px;
+    top: 100px;
+    font-size: 4.5rem;
+    font-family: $font-vollkorn;
+    line-height: 1;
+    z-index: 4;
+    font-weight: normal;
+    color: $grown-02;
+    display: inline-table;
+    @include tab {
+      font-size: 3.8rem;
+      display: block;
+      text-align: center;
+      position: static;
+    }
+    @include sp {
+      font-size: 2.8rem;
+      display: block;
+      text-align: center;
+      position: static;
+    }
+  }
+  .content {
+    position: absolute;
+    width: 300px;
+    right: 6.67%;
+    bottom: 25.81%;
+    top: auto;
+    left: auto;
+    z-index: 4;
+    @include tab {
+      margin: 20px auto 0;
+      text-align: center;
+      width: 700px;
+      position: static;
+    }
+    @include sp {
+      margin: 20px auto 0;
+      text-align: center;
+      position: static;
+    }
+    p {
+      color: $gray-02;
+      line-height: 1.3;
+      font-weight: normal;
+      @include tab {
+        text-align: center;
+      }
+      @include sp {
+        text-align: center;
+        font-size: 1.4rem;
+      }
+    }
+    .link {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 20px;
+      &:hover {
+        span.buy {
+          &::after {
+            width: 100%;
+          }
+        }
+        span.icon {
+          margin-left: 5px;
+        }
+      }
+      span.buy {
+        position: relative;
+        white-space: nowrap;
+        font-family: $font-barlow-condensed;
+        font-weight: 500;
+        text-transform: uppercase;
+        color: $black-02;
+        &::after {
+          position: absolute;
+          content: "";
+          background: $black-01;
+          width: 0;
+          height: 1px;
+          bottom: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          transition: 0.4s;
+        }
+      }
+      span.icon {
+        display: inline-flex;
+        transition: 0.4s;
+      }
+    }
+  }
+}
+.gsap_wrapper_pc {
+  position: relative;
+  height: 788px;
+  overflow: hidden;
+  display: flex;
+  .img1,
+  .img2,
+  .img3 {
+    position: absolute;
+    inset: 0;
+    img {
+      height: 100%;
+    }
+  }
+  .img1 {
+    z-index: 3;
+  }
+  .img2 {
+    z-index: 2;
+  }
+  .img3 {
+    z-index: 1;
+  }
+}
+
+.gsap_wrapper_sp {
+  height: 100%;
+  overflow: hidden;
+  padding-bottom: 50px;
+  .gsap_img {
+    height: 700px;
+    max-width: 100%;
+    margin: -150px auto 0;
+    position: relative;
+    @include sp {
+      height: 500px;
+      margin-top: -100px;
+    }
+    div {
+      position: absolute;
+      inset: 0;
+    }
+    .img1,
+    .img2,
+    .img3 {
+      img {
+        height: 100%;
+      }
+    }
+    .img1 {
+      z-index: 3;
+    }
+    .img2 {
+      z-index: 2;
+    }
+    .img3 {
+      z-index: 1;
+    }
+  }
+}
+
+.bg_brand {
+  background: url("/img/top/bg_brand.jpg") no-repeat;
+  background-size: cover;
+  .bg_primary {
+    background: $orange-02;
+    .title_brand {
+      font-family: $font-vollkorn;
+      letter-spacing: 0;
+    }
+    .sub_brand,
+    .button {
+      font-family: $font-barlow-condensed;
+    }
+  }
+}

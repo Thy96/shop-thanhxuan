@@ -1,0 +1,16 @@
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+
+.swiper_container {
+    padding-bottom: 30px;
+    .swiper_slide {
+        width: 20%;
+        height: 100%;
+        @include tab {
+            width: 40%;
+        }
+        @include sp {
+            width: 100%;
+        }
+    }
+}

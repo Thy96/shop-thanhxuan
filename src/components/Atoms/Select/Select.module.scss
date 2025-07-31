@@ -1,0 +1,12 @@
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+
+.select_wrapper {
+    padding: 5.5px 2px;
+    border-bottom: 1px solid $gray-01;
+    width: 100%;
+    letter-spacing: 0.075em;
+    .disabled {
+        border-bottom: 1px solid $gray-01;
+    }
+}

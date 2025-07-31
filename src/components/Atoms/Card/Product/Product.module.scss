@@ -1,0 +1,85 @@
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+
+.wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    @include tab {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    @include sp {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+.item {
+    .archor {
+        width: 100%;
+        overflow: hidden;
+        display: block;
+        border-radius: 4px;
+        .thumbnail {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.4s;
+        }
+        &:hover {
+            .thumbnail {
+                transform: scale(1.1);
+            }
+        }
+    }
+    .box_content {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        &_left {
+            width: 78%;
+            &_title {
+                @include sp {
+                    overflow: hidden;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 3;
+                }
+            }
+            &_des {
+                margin-top: 10px;
+            }
+            &_price {
+                display: flex;
+                flex-wrap: wrap;
+                margin-top: 15px;
+                .price {
+                    font-weight: bold;
+                }
+                .line_through {
+                    text-decoration: line-through;
+                    color: $gray-01;
+                }
+                .sale {
+                    font-weight: bold;
+                    margin-right: 10px;
+                }
+            }
+        }
+        &_right {
+            width: 20%;
+            display: flex;
+            justify-content: flex-end;
+            .btn_bag {
+                width: 44px;
+                height: 44px;
+                background: $orange-01;
+                justify-content: center;
+                padding-top: 20px;
+                &:hover {
+                    background: $black-01;
+                    color: $white-01;
+                }
+            }
+        }
+    }
+}

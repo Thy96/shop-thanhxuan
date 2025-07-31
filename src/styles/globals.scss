@@ -1,0 +1,79 @@
+@use "./reset" as *;
+@use "./variables" as *;
+@use "./mixins" as *;
+
+.main-body {
+  font-family: $font-nunito;
+}
+
+// Custom Swiper
+.swiper-container {
+  position: relative;
+  overflow: hidden;
+  .swiper-button-next,
+  .swiper-button-prev {
+    opacity: 0;
+    transition: 0.3s;
+    background: $black-01;
+    height: 70px;
+    width: 70px;
+    padding: 10px;
+    border-radius: 4px;
+    &::after {
+      font-size: 20px;
+      font-weight: bold;
+      color: $white-01;
+    }
+    &:hover {
+      background: $grown-01;
+    }
+  }
+  .swiper-button-next {
+    right: -30px;
+    &::after {
+      padding-left: 5px;
+    }
+  }
+  .swiper-button-prev {
+    left: -30px;
+    &::after {
+      padding-right: 5px;
+    }
+  }
+  .swiper-button-next.swiper-button-disabled {
+    right: -70px !important;
+  }
+  .swiper-button-prev.swiper-button-disabled {
+    left: -70px !important;
+  }
+
+  &:hover {
+    .swiper-button-next,
+    .swiper-button-prev {
+      opacity: 1;
+    }
+
+    .swiper-button-next {
+      right: 0;
+    }
+
+    .swiper-button-prev {
+      left: 0;
+    }
+  }
+
+  .swiper-horizontal > .swiper-scrollbar,
+  .swiper-scrollbar.swiper-scrollbar-horizontal {
+    height: 2px;
+  }
+}
+
+.swiper-marquee {
+  .swiper-wrapper {
+    transition-timing-function: linear;
+    .swiper-slide {
+      width: fit-content;
+      white-space: nowrap;
+    }
+  }
+}
