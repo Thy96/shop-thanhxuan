@@ -140,6 +140,10 @@ export const useBestsellers = () => {
   const { data, error, isLoading } = useSWR<BestSellerResponse>(
     "http://localhost:3000/api/bestsellers/products",
     fetcher,
+    {
+      revalidateOnFocus: false,
+      shouldRetryOnError: false,
+    },
   );
 
   return {
@@ -155,6 +159,8 @@ export const useProducts = (page: number = 1, limit: number = 10) => {
     fetcher,
     {
       keepPreviousData: true,
+      revalidateOnFocus: false,
+      shouldRetryOnError: false,
     },
   );
 

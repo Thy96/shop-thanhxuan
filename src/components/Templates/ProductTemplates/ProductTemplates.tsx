@@ -3,6 +3,7 @@ import ProductList from "@/components/Atoms/Card/Product/Product";
 import { useProducts } from "@/services/api";
 import Pagination from "@/components/Organisms/Pagination/Pagination";
 import { useRouter, useSearchParams } from "next/navigation";
+import { products } from "@/lib/database/product";
 
 function ProductTemplates() {
   const router = useRouter();
@@ -22,9 +23,9 @@ function ProductTemplates() {
     router.push(`?page=${newPage}`, { scroll: false });
   };
 
-  const { products, isLoadingProducts } = useProducts(page, 10);
+  const {} = useProducts(page, 10);
 
-  if (isLoadingProducts) return <div>Loading...</div>;
+  // if (isLoadingProducts) return <div>Loading...</div>;
   return (
     <>
       <ProductList dataSource={products} />

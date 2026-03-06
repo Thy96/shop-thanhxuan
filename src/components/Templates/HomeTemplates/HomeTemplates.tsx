@@ -9,7 +9,7 @@ import { dataMainVisual } from "@/lib/database/mainvisual";
 import { dataBrands } from "@/lib/database/brand";
 
 import useViewport from "@/hooks/useHooks/useViewPort";
-import { useBestsellers, useBlogs } from "@/services/api";
+import { useBlogs } from "@/services/api";
 
 import CarouselMainVisual from "@/components/Atoms/CarouselMainVisual/CarouselMainVisual";
 import GsapWrapper from "@/components/Atoms/Gsap/GsapWrapper";
@@ -22,6 +22,7 @@ import Carousel from "@/components/Atoms/Carousel/Carousel";
 import BlogListItem from "@/components/Atoms/Card/Blog/BlogItem";
 import ProductItem from "@/components/Atoms/Card/Product/ProductItem";
 import { useRouter } from "next/navigation";
+import { products } from "@/lib/database/product";
 
 const arr = [
   {
@@ -58,8 +59,8 @@ const slogan = [
 function HomeTemplates() {
   const widthUI = useViewport();
   const routes = useRouter();
-  const { bestsellers: bestsellerData, isLoadingBestSellers } =
-    useBestsellers();
+  // const { bestsellers: bestsellerData, isLoadingBestSellers } =
+  //   useBestsellers();
   const { blogs, isLoadingBlogs } = useBlogs();
 
   return (
@@ -493,7 +494,7 @@ function HomeTemplates() {
         </div>
 
         <div className={`${styles.bestselling_products_list}`}>
-          {isLoadingBestSellers ? (
+          {/* {isLoadingBestSellers ? (
             "đang tải"
           ) : (
             <Carousel
@@ -510,7 +511,21 @@ function HomeTemplates() {
               }}
               renderItem={(item) => <ProductItem data={item} key={item.id} />}
             />
-          )}
+          )} */}
+          <Carousel
+            dataSource={products}
+            slidesPerView={1}
+            breakpoints={{
+              768: {
+                slidesPerView: "auto",
+              },
+            }}
+            className={{
+              container: styles.bestselling_products_container,
+              item: styles.bestselling_products_item,
+            }}
+            renderItem={(item) => <ProductItem data={item} key={item.id} />}
+          />
         </div>
       </div>
 
