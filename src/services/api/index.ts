@@ -83,6 +83,10 @@ export const useBlogs = (page: number = 1, limit: number = 1) => {
   const { data, error, isLoading } = useSWR<BlogsResponse>(
     `http://localhost:4000/api/admin/notes/?page=${page}&limit=${limit}`,
     fetcher,
+    {
+      revalidateOnFocus: false,
+      shouldRetryOnError: false,
+    },
   );
 
   return {
@@ -102,6 +106,10 @@ export const useBlog = (slug?: string) => {
   const { data, error, isLoading } = useSWR<BlogResponse>(
     slug ? `http://localhost:4000/api/admin/notes/slug/${slug}` : null, // nếu chưa có slug thì không call
     fetcher,
+    {
+      revalidateOnFocus: false,
+      shouldRetryOnError: false,
+    },
   );
 
   return {
@@ -114,15 +122,19 @@ export const useBlog = (slug?: string) => {
 export const useCategories = () => {
   const { data, error, isLoading } = useSWR<Categories[]>(
     "http://localhost:4000/api/admin/notes/categories",
-    fetcher
-  )
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      shouldRetryOnError: false,
+    },
+  );
 
   return {
     categories: data ?? [],
     isLoading,
     isError: error,
-  }
-}
+  };
+};
 
 export const useBestsellers = () => {
   const { data, error, isLoading } = useSWR<BestSellerResponse>(

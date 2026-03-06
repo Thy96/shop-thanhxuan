@@ -7,11 +7,17 @@ import { Categories } from "@/types/types";
 
 export default function CategorySidebar({
   categories,
+  isError,
+  isLoading,
 }: {
   categories?: Categories[];
+  isError?: boolean;
+  isLoading?: boolean;
 }) {
   const [open, setOpen] = useState(false);
 
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Không tìm thấy danh mục</p>;
   return (
     <div className={styles.wrapper}>
       {/* Header */}

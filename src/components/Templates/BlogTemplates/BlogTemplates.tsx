@@ -23,9 +23,10 @@ function BlogTemplates() {
     router.push(`?page=${newPage}`, { scroll: false });
   };
 
-  const { blogs, isLoadingBlogs, pagination } = useBlogs(page, 10);
+  const { blogs, isError, isLoadingBlogs, pagination } = useBlogs(page, 10);
 
   if (isLoadingBlogs) return <div>Loading...</div>;
+  if (isError) return <div>Không tìm thấy bài viết</div>;
 
   return (
     <>

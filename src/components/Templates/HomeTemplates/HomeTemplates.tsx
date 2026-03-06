@@ -60,7 +60,7 @@ function HomeTemplates() {
   const routes = useRouter();
   const { bestsellers: bestsellerData, isLoadingBestSellers } =
     useBestsellers();
-  const { data: data, isLoadingBlogs } = useBlogs();
+  const { blogs, isLoadingBlogs } = useBlogs();
 
   return (
     <>
@@ -596,7 +596,7 @@ function HomeTemplates() {
             <p>Đang tải tin tức</p>
           ) : (
             <Carousel
-              dataSource={data}
+              dataSource={blogs}
               slidesPerView={1}
               pagination={true}
               loop={true}

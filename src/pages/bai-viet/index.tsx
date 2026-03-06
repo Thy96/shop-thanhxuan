@@ -8,13 +8,16 @@ import { useCategories } from "@/services/api";
 function BlogsPage() {
   const { categories, isError, isLoading } = useCategories();
 
-  if (isLoading) return <p>Loading</p>;
-  if (isError) return <p>Không tìm thấy category</p>;
-
   return (
     <SecondLayout
       title="Tin tức"
-      aside={<CategorySidebar categories={categories} />}
+      aside={
+        <CategorySidebar
+          categories={categories}
+          isError={isError}
+          isLoading={isLoading}
+        />
+      }
       bottomContent={<CtaBanner />}
       className="flex-row-reverse"
     >
