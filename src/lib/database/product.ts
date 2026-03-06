@@ -1131,3 +1131,41 @@ export const products: Product[] = [
     stock: 0,
   },
 ];
+
+export const product: Product = {
+  id: "1",
+  slug: "nuoc-duong-toc-tinh-dau-buoi-140ml",
+  images: [
+    {
+      url: "/img/top/Avatar_Website_Nuoc_duong_toc_tinh_dau_buoi_140ml_Cai_tien_moi_240629_7819f9ba98.jpg",
+      alt: "hình ảnh đẹp",
+      isPrimary: true,
+      order: 1,
+    },
+    {
+      url: "/img/top/Avatar_Website_Nuoc_duong_toc_tinh_dau_buoi_140ml_Cai_tien_moi_240629_7819f9ba98.jpg",
+      alt: "hình ảnh đẹp",
+      isPrimary: false,
+      order: 2,
+    },
+    {
+      url: "/img/top/Avatar_Website_Nuoc_duong_toc_tinh_dau_buoi_140ml_Cai_tien_moi_240629_7819f9ba98.jpg",
+      alt: "hình ảnh đẹp",
+      isPrimary: false,
+      order: 3,
+    },
+  ],
+  title: "Nước dưỡng tóc tinh dầu bưởi 140ml",
+  decription:
+    "Với công thức dịu nhẹ không chứa sulfate, gel rửa mặt cà phê Đắk Lắk có khả năng làm sạch hiệu quả mà không gây khô da, mang lại cảm giác sảng khoái cùng một làn da tươi mới, sạch thoáng và trông tràn đầy sinh lực để bắt đầu một ngày mới. \nNhững hạt cà phê Đắk Lắk xay nhuyễn giàu cafeine hòa quyện với bơ cacao Tiền Giang giúp bạn loại bỏ lớp tế bào chết già cỗi và xỉn màu, đánh thức làn da tươi mới đầy năng lượng cùng cảm giác mượt mà và mềm mịn lan tỏa.",
+  content: `<h2>Tinh chất bí đao Cocoon – Giải pháp cho làn da mụn</h2><p>Với thành phần chủ đạo là <strong>bí đao thanh mát</strong>, bổ sung thêm <strong>7% Niacinamide (Vitamin B3)</strong>, <strong>TECA từ rau má</strong> và <strong>tinh dầu tràm trà</strong>, tinh chất bí đao giúp phục hồi mạnh mẽ tình trạng mụn, kiểm soát bã nhờn và làm thông thoáng lỗ chân lông.</p><img src=\"/img/top/Avatar_Website_Nuoc_duong_toc_tinh_dau_buoi_140ml_Cai_tien_moi_240629_7819f9ba98.jpg\" alt=\"Tinh chất bí đao Cocoon\" /><p>Sản phẩm hỗ trợ giảm mụn ẩn, cải thiện bề mặt da và làm mờ vết thâm sau mụn.</p><a href="/san-pham/tinh-chat-bi-dao"target="_blank"rel="noopener noreferrer">Xem thêm</a>`,
+  url: "1",
+  category: {
+    cate_id: "1",
+    cate_name: "Tinh chất",
+    cate_slug: "tinh-chat",
+  },
+  price: 165000,
+  sale: 0,
+  stock: 0,
+};

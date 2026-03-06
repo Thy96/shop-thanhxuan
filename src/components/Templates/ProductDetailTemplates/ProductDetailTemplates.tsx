@@ -14,6 +14,7 @@ import Icons from "@/components/Atoms/Icons/Icons";
 import Title from "@/components/Atoms/Title/Title";
 import Paragraph from "@/components/Atoms/Paragraph/Paragraph";
 import Carousel from "@/components/Atoms/Carousel/Carousel";
+import { product } from "@/lib/database/product";
 
 export default function ProductDetailTemplate() {
   const router = useRouter();
@@ -23,10 +24,10 @@ export default function ProductDetailTemplate() {
   const productSlug =
     router.isReady && typeof slug === "string" ? slug : undefined;
 
-  const { product, isLoadingProduct } = useProductDetail(productSlug);
+  const {} = useProductDetail(productSlug);
 
-  if (isLoadingProduct) return <p>Loading...</p>;
-  if (!product) return <p>Không tìm thấy sản phẩm</p>;
+  // if (isLoadingProduct) return <p>Loading...</p>;
+  // if (!product) return <p>Không tìm thấy sản phẩm</p>;
 
   return (
     <div className={styles.product}>
