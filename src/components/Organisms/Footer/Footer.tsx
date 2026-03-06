@@ -1,14 +1,16 @@
 import React, { ReactNode } from "react";
+import Image from "next/image";
+import Link from "next/link";
 
 import styles from "./Footer.module.scss";
 import classNames from "classnames";
-import Image from "next/image";
+
+import { about, order, shop, social } from "@/mocks/footer";
+
 import Title from "@/components/Atoms/Title/Title";
 import InputText from "@/components/Atoms/Input/InputText/InputText";
 import Paragraph from "@/components/Atoms/Paragraph/Paragraph";
 import Icons from "@/components/Atoms/Icons/Icons";
-import Link from "next/link";
-import { about, order, shop, social } from "@/mocks/footer";
 
 interface IFooter {
   className?: string;

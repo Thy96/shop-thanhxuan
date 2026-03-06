@@ -5,23 +5,21 @@ import { Blog } from "@/types/types";
 import styles from "./Blog.module.scss";
 import classNames from "classnames";
 
-import BoxItem from "./BlogItem";
+import BlogListItem from "./BlogItem";
 
 interface IBlog {
-    dataSource?: Blog[];
-    className?: string;
+  dataSource?: Blog[];
+  className?: string;
 }
 
-function Box({ dataSource = [], className }: IBlog) {
-    console.log(dataSource);
-
-    return (
-        <div className={classNames(styles.wrapper, className)}>
-            {dataSource?.map((blog) => (
-                <BoxItem key={blog.id} data={blog} />
-            ))}
-        </div>
-    );
+function BlogList({ dataSource = [], className }: IBlog) {
+  return (
+    <div className={classNames(styles.wrapper, className)}>
+      {dataSource?.map((blog) => (
+        <BlogListItem key={blog.id} data={blog} />
+      ))}
+    </div>
+  );
 }
 
-export default Box;
+export default BlogList;

@@ -8,19 +8,18 @@ import styles from "./Product.module.scss";
 import ProductItem from "./ProductItem";
 
 interface IProduct {
-    dataSource?: Product[];
-    className?: string;
-    onChange?: (data: Product) => void;
+  dataSource?: Product[];
+  className?: string;
 }
 
-function Card({ dataSource = [], className, onChange }: IProduct) {
-    return (
-        <div className={classNames(styles.wrapper, className)}>
-            {dataSource.map((product, i) => (
-                <ProductItem key={i} data={product} onChange={onChange} />
-            ))}
-        </div>
-    );
+function ProductList({ dataSource = [], className }: IProduct) {
+  return (
+    <div className={classNames(styles.wrapper, className)}>
+      {dataSource.map((product, i) => (
+        <ProductItem key={i} data={product} />
+      ))}
+    </div>
+  );
 }
 
-export default Card;
+export default ProductList;

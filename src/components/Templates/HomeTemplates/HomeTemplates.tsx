@@ -6,18 +6,61 @@ import styles from "./HomeTemplates.module.scss";
 import classNames from "classnames";
 
 import { dataMainVisual } from "@/lib/database/mainvisual";
+import { dataBrands } from "@/lib/database/brand";
+
+import useViewport from "@/hooks/useHooks/useViewPort";
+import { useBestsellers, useBlogs } from "@/services/api";
 
 import CarouselMainVisual from "@/components/Atoms/CarouselMainVisual/CarouselMainVisual";
 import GsapWrapper from "@/components/Atoms/Gsap/GsapWrapper";
 import Paragraph from "@/components/Atoms/Paragraph/Paragraph";
 import Icons from "@/components/Atoms/Icons/Icons";
 import Marquee from "@/components/Atoms/Marquee/Marquee";
-import useViewport from "@/hooks/useHooks/useViewPort";
 import Title from "@/components/Atoms/Title/Title";
 import Button from "@/components/Atoms/Button";
+import Carousel from "@/components/Atoms/Carousel/Carousel";
+import BlogListItem from "@/components/Atoms/Card/Blog/BlogItem";
+import ProductItem from "@/components/Atoms/Card/Product/ProductItem";
+import { useRouter } from "next/navigation";
+
+const arr = [
+  {
+    thumbnail: "/img/top/Artboard_1.jpg",
+    title: "Dầu dừa bến tre",
+  },
+  {
+    thumbnail: "/img/top/Artboard_2.jpg",
+    title: "Vỏ bưởi",
+  },
+  {
+    thumbnail: "/img/top/Artboard_3.jpg",
+    title: "Hoa hồng",
+  },
+  {
+    thumbnail: "/img/top/Artboard_1.jpg",
+    title: "Bí đao",
+  },
+];
+
+const slogan = [
+  {
+    content:
+      "“Cocoon Vietnam – Từ mầm xanh làm đẹp đến giải thưởng danh giá tại ELLE Beauty Awards 2021”",
+    brand: "elle vietnam",
+  },
+  {
+    content:
+      "“Cocoon Vietnam – Từ mầm xanh làm đẹp đến giải thưởng danh giá tại ELLE Beauty Awards 2021”",
+    brand: "elle vietnam",
+  },
+];
 
 function HomeTemplates() {
   const widthUI = useViewport();
+  const routes = useRouter();
+  const { bestsellers: bestsellerData, isLoadingBestSellers } =
+    useBestsellers();
+  const { data: data, isLoadingBlogs } = useBlogs();
 
   return (
     <>
@@ -26,6 +69,12 @@ function HomeTemplates() {
         <>
           <Marquee
             className={styles.marquee}
+            spaceBetween={50}
+            breakpoints={{
+              1024: {
+                spaceBetween: 100,
+              },
+            }}
             marqueeContent={[
               {
                 value: (
@@ -74,7 +123,7 @@ function HomeTemplates() {
                     scrub: 0.5,
                     // markers: true,
                   },
-                }
+                },
               );
               gsap.fromTo(
                 box2,
@@ -92,7 +141,7 @@ function HomeTemplates() {
                     scrub: 0.5,
                     // markers: true,
                   },
-                }
+                },
               );
               gsap.fromTo(
                 box3,
@@ -110,7 +159,7 @@ function HomeTemplates() {
                     scrub: 0.5,
                     // markers: true,
                   },
-                }
+                },
               );
             }}
           >
@@ -191,7 +240,7 @@ function HomeTemplates() {
                   scrub: 0.5,
                   // markers: true,
                 },
-              }
+              },
             );
             gsap.fromTo(
               box1,
@@ -209,7 +258,7 @@ function HomeTemplates() {
                   scrub: 0.5,
                   // markers: true,
                 },
-              }
+              },
             );
             gsap.fromTo(
               box2,
@@ -227,7 +276,7 @@ function HomeTemplates() {
                   scrub: 0.5,
                   // markers: true,
                 },
-              }
+              },
             );
             gsap.fromTo(
               box3,
@@ -243,7 +292,7 @@ function HomeTemplates() {
                   scrub: 0.5,
                   // markers: true,
                 },
-              }
+              },
             );
             gsap.fromTo(
               box4,
@@ -259,7 +308,7 @@ function HomeTemplates() {
                   scrub: 0.5,
                   // markers: true,
                 },
-              }
+              },
             );
           }}
         >
@@ -321,8 +370,7 @@ function HomeTemplates() {
         >
           <Title
             level={2}
-            className={`italic textbox__heading 
-             text-typo-heading lg:!text-8xl !text-5xl ${styles.title_brand}`}
+            className={`italic textbox__heading text-typo-heading lg:!text-8xl !text-5xl ${styles.title_brand}`}
           >
             Triết lý
             <span
@@ -340,7 +388,7 @@ function HomeTemplates() {
             lý trên hành trình tìm vẻ đẹp thật sự của làn da.
           </Paragraph>
           <Button
-            className={`flex justify-center w-full lg:!p-10 !p-6 mt-8 lg:mt-15 max-w-2xl lg:!text-4xl uppercase ${styles.button}`}
+            className={`lg:!p-10 !p-6 mt-8 lg:mt-15 max-w-2xl lg:!text-4xl ${styles.button}`}
             htmlType="tertiary"
             postfixIcon={<Icons.ArrowRightIcon />}
           >
@@ -376,6 +424,225 @@ function HomeTemplates() {
           ]}
         />
       )}
+
+      <div
+        className={`text-center md:pt-50 pt-10 md:pb-50 pb-20 ${styles.brand}`}
+      >
+        <h2 className={`${styles.certification} mb-4`}>
+          Chứng nhận bởi các tổ chức Quốc tế
+        </h2>
+        <Carousel
+          dataSource={dataBrands}
+          slidesPerView={1}
+          breakpoints={{
+            900: {
+              slidesPerView: 3,
+            },
+          }}
+          navigation={false}
+          autoplay
+          renderItem={(item, index) => (
+            <div key={index} className={`${styles.carousel_item}`}>
+              <picture className="block">
+                <Image
+                  src={item.image}
+                  width={230}
+                  height={230}
+                  alt={item.title}
+                  className="m-auto"
+                />
+              </picture>
+              <h3 className={`${styles.carousel_title}`}>{item.title}</h3>
+              <h4 className={`${styles.carousel_subtitle}`}>{item.subtitle}</h4>
+              <p className="md:mt-4 md:px-2.5 text-stone-500 not-md:text-2xl px-10 mt-6">
+                {item.content}
+              </p>
+            </div>
+          )}
+        />
+      </div>
+
+      <Link href="#">
+        <Image
+          src="/img/top/Banner_Thu_hoi_vo_chai_PC.jpg"
+          alt="vo chai"
+          width={1920}
+          height={600}
+          className="hidden md:block"
+        />
+        <Image
+          src="/img/top/Banner_Thu_hoi_vo_chai_SP.jpg"
+          alt="vo chai"
+          width={767}
+          height={900}
+          className="block md:hidden"
+        />
+      </Link>
+
+      <div className={`${styles.bestselling_products}`}>
+        <div className={`${styles.bestselling_products_box}`}>
+          <h2 className={`${styles.bestselling_products_title}`}>
+            <span>Sản phẩm</span>
+            <br />
+            Bán Chạy
+          </h2>
+          <p className={`${styles.bestselling_products_content}`}>
+            Cocoon tự hào khi các sản phẩm mà chúng tôi tạo ra mang đến những
+            thay đổi tuyệt vời trên làn da, mái tóc của bạn.
+          </p>
+        </div>
+
+        <div className={`${styles.bestselling_products_list}`}>
+          {isLoadingBestSellers ? (
+            "đang tải"
+          ) : (
+            <Carousel
+              dataSource={bestsellerData}
+              slidesPerView={1}
+              breakpoints={{
+                768: {
+                  slidesPerView: "auto",
+                },
+              }}
+              className={{
+                container: styles.bestselling_products_container,
+                item: styles.bestselling_products_item,
+              }}
+              renderItem={(item) => <ProductItem data={item} key={item.id} />}
+            />
+          )}
+        </div>
+      </div>
+
+      <Link
+        href="#"
+        className="ml-5 mr-5 lg:ml-16 lg:mr-16 md:ml-7 md:mr-7 block"
+      >
+        <Image
+          src="/img/top/banner_green_living_ca.jpg"
+          alt="banner"
+          width={1920}
+          height={600}
+        />
+      </Link>
+
+      <div className={`${styles.story}`}>
+        <div className={`${styles.story_list}`}>
+          <Carousel
+            dataSource={arr}
+            slidesPerView={1}
+            breakpoints={{
+              768: {
+                slidesPerView: 2,
+              },
+            }}
+            className={{
+              container: styles.story_container,
+              item: styles.story_item,
+            }}
+            renderItem={(item, index) => (
+              <div key={index}>
+                <figure>
+                  <Image
+                    src={item.thumbnail}
+                    alt={item.title}
+                    width={280}
+                    height={341}
+                  />
+                </figure>
+                <h3>{item.title}</h3>
+              </div>
+            )}
+          />
+        </div>
+
+        <div className={`${styles.story_box}`}>
+          <h2 className={`${styles.story_title}`}>
+            <span>Câu chuyện</span>
+            <br />
+            nguyên liệu
+          </h2>
+          <p className={`${styles.story_content}`}>
+            {`"Hồn Việt trong chai"`}
+            <br /> Chúng tôi viết nên câu chuyện về hoa trái đặc hữu của Việt
+            Nam, rất gần gũi và quen thuộc từ tên gọi, mùi hương và cả vùng đất
+            sản sinh ra chúng.
+          </p>
+          <Button
+            className={`lg:!p-10 !p-6 mt-8 lg:mt-15 lg:!text-4xl ${styles.button}`}
+            htmlType="secondary"
+            postfixIcon={<Icons.ArrowRightIcon />}
+          >
+            Tìm hiểu thêm
+          </Button>
+        </div>
+      </div>
+
+      <div className={styles.posts}>
+        <div className={styles.posts_head}>
+          <h2 className={styles.posts_title}>Bài viết mới nhất</h2>
+          <Button
+            onClick={() => routes.push("/bai-viet")}
+            className={`lg:!p-10 !p-6 lg:!text-4xl ${styles.button}`}
+            htmlType="secondary"
+            postfixIcon={<Icons.ArrowRightIcon />}
+          >
+            Tất cả bài viết
+          </Button>
+        </div>
+
+        <div className={styles.posts_list}>
+          {isLoadingBlogs ? (
+            <p>Đang tải tin tức</p>
+          ) : (
+            <Carousel
+              dataSource={data}
+              slidesPerView={1}
+              pagination={true}
+              loop={true}
+              scrollbar={false}
+              autoplay
+              speed={1000}
+              breakpoints={{
+                768: {
+                  slidesPerView: 2,
+                },
+                1025: {
+                  slidesPerView: 3,
+                },
+              }}
+              className={{
+                item: styles.posts_item,
+              }}
+              renderItem={(item, i) => <BlogListItem key={i} data={item} />}
+            />
+          )}
+        </div>
+      </div>
+
+      <div className={styles.slogan}>
+        <Carousel
+          dataSource={slogan}
+          slidesPerView={1}
+          pagination={true}
+          loop={true}
+          scrollbar={false}
+          navigation={false}
+          spaceBetween={0}
+          autoplay
+          speed={1000}
+          className={{
+            container: styles.slogan_wrapper,
+            item: styles.slogan_item,
+          }}
+          renderItem={(item, i) => (
+            <div key={i}>
+              <h2 className={styles.slogan_content}>{item.content}</h2>
+              <div className={styles.slogan_brand}>{item.brand}</div>
+            </div>
+          )}
+        />
+      </div>
     </>
   );
 }

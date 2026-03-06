@@ -2,18 +2,27 @@
 @use "@/styles/mixins" as *;
 
 .marquee {
-  padding: 10px 0;
+  padding: 30px 0;
+  border-bottom: 1px solid $gray-03;
   @include tab {
     padding: 20px 0;
   }
+  @include sp {
+    padding: 10px 0;
+  }
+
   img {
     height: 100%;
     width: 2954px;
     @include tab {
       width: 1200px;
     }
+    @include sp {
+      width: 3000px;
+    }
   }
 }
+
 .gsap_wrapper {
   .title {
     position: absolute;
@@ -110,11 +119,16 @@
     }
   }
 }
+
 .gsap_wrapper_pc {
   position: relative;
   height: 788px;
   overflow: hidden;
   display: flex;
+
+  @include tab {
+    height: 500px;
+  }
   .img1,
   .img2,
   .img3 {
@@ -132,6 +146,26 @@
   }
   .img3 {
     z-index: 1;
+  }
+
+  .title {
+    @include tab {
+      text-align: left;
+      left: 100px;
+      top: 0;
+      position: absolute;
+    }
+  }
+
+  .content {
+    @include tab {
+      width: 300px;
+      right: 6.67%;
+      bottom: auto;
+      top: -20%;
+      left: auto;
+      position: absolute;
+    }
   }
 }
 
@@ -183,6 +217,383 @@
     .sub_brand,
     .button {
       font-family: $font-barlow-condensed;
+    }
+  }
+}
+
+.brand {
+  .certification {
+    font-family: $font-barlow-condensed;
+    font-size: 2.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05rem;
+    text-transform: uppercase;
+
+    @include sp {
+      font-size: 2.2rem;
+    }
+  }
+
+  .carousel_item {
+    picture {
+      img {
+        @include sp {
+          width: 200px;
+          height: 200px;
+        }
+      }
+    }
+    .carousel_title {
+      font-family: $font-vollkorn;
+      font-size: 3.6rem;
+      margin-top: 10px;
+      font-weight: 300;
+      @include sp {
+        font-size: 2.8rem;
+      }
+    }
+
+    .carousel_subtitle {
+      font-family: $font-barlow-condensed;
+      font-size: 1.8rem;
+      margin-top: 5px;
+      color: $black-02;
+      letter-spacing: 1px;
+      @include sp {
+        font-size: 1.6rem;
+        margin-top: 10px;
+      }
+    }
+  }
+}
+
+.bestselling_products,
+.story {
+  display: grid;
+  align-items: flex-end;
+  padding: 80px 0;
+
+  @include sp {
+    display: block;
+    padding: 50px 0;
+  }
+
+  &_box {
+    padding: 50px;
+
+    @include tab {
+      padding: 0 25px;
+    }
+
+    @include sp {
+      padding: 0 25px;
+    }
+  }
+
+  &_title {
+    font-size: 3.2rem;
+    font-family: $font-barlow-condensed;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1.2;
+
+    @include sp {
+      text-align: center;
+    }
+
+    span {
+      font-family: $font-vollkorn;
+      font-weight: 100;
+      font-style: italic;
+      text-transform: capitalize;
+
+      @include sp {
+        margin-right: 10px;
+      }
+    }
+
+    br {
+      @include sp {
+        display: none;
+      }
+    }
+  }
+
+  &_content {
+    color: $gray-04;
+    font-weight: 400;
+    margin-top: 15px;
+
+    @include sp {
+      display: none;
+    }
+  }
+
+  &_container {
+    padding-bottom: 70px !important;
+    padding-left: 7px;
+
+    @include tab {
+      padding-bottom: 20px !important;
+      padding-left: 0;
+    }
+
+    @include sp {
+      padding-bottom: 20px !important;
+      padding-left: 0;
+    }
+  }
+}
+
+.bestselling_products {
+  grid-template-columns: minmax(0, 520px) minmax(0, 1fr);
+
+  @include tab {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  &_list {
+    @include tab {
+      padding: 20px;
+    }
+
+    @include sp {
+      padding: 20px;
+    }
+  }
+
+  &_item {
+    width: 38% !important;
+
+    @include tab {
+      width: 20% !important;
+    }
+
+    @include sp {
+      width: 100% !important;
+    }
+  }
+}
+.story {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
+
+  @include tab {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column-reverse;
+  }
+
+  @include sp {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column-reverse;
+  }
+
+  &_container {
+    padding-left: 0;
+  }
+
+  &_box {
+    @include sp {
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  &_title {
+    span {
+      @include sp {
+        display: block;
+      }
+    }
+  }
+
+  &_content {
+    display: block;
+
+    @include sp {
+      font-size: 1.4rem;
+    }
+  }
+
+  &_list {
+    padding-left: 50px;
+    width: 100%;
+
+    @include tab {
+      padding: 20px;
+    }
+
+    @include sp {
+      padding: 20px;
+    }
+  }
+
+  &_item {
+    figure {
+      img {
+        aspect-ratio: 384/441;
+        width: 100%;
+        object-fit: cover;
+      }
+    }
+
+    h3 {
+      text-align: center;
+      font-size: 2.8rem;
+      font-weight: 500;
+      font-family: $font-barlow-condensed;
+      text-transform: uppercase;
+      @include sp {
+        font-size: 1.5rem;
+        margin-top: 10px;
+      }
+    }
+  }
+
+  .button {
+    @include tab {
+      display: none;
+    }
+
+    @include sp {
+      display: none;
+    }
+  }
+}
+
+.posts {
+  padding: 0 50px 50px;
+
+  @include tab {
+    padding: 0 20px 50px;
+  }
+
+  @include sp {
+    padding: 0 20px 50px;
+  }
+
+  &_head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
+    gap: 50px;
+
+    @include tab {
+      display: block;
+    }
+
+    @include sp {
+      display: block;
+    }
+  }
+
+  &_title {
+    font-size: 7.2rem;
+    line-height: 1;
+    font-style: italic;
+    font-family: $font-vollkorn;
+    font-weight: 400;
+
+    @include tab {
+      font-size: 5rem;
+    }
+
+    @include sp {
+      font-size: 3rem;
+    }
+  }
+
+  &_list {
+    margin-top: 50px;
+
+    @include tab {
+      margin-top: 20px;
+    }
+
+    @include sp {
+      margin-top: 20px;
+    }
+  }
+
+  &_item {
+    @include tab {
+      padding-bottom: 30px;
+    }
+
+    @include sp {
+      padding-bottom: 10px;
+    }
+  }
+
+  .button {
+    letter-spacing: 0;
+
+    @include tab {
+      display: none;
+    }
+
+    @include sp {
+      display: none;
+    }
+  }
+}
+
+.slogan {
+  padding: 50px 0 20px;
+  background-color: rgba(237, 224, 204, 0.4);
+  pointer-events: none;
+
+  @include sp {
+    padding-top: 40px;
+  }
+
+  &_item {
+    padding: 0 100px 30px;
+
+    @include tab {
+      padding: 0 20px 30px;
+    }
+
+    @include sp {
+      padding: 0 20px 20px;
+    }
+  }
+
+  &_content {
+    text-align: center;
+    font-size: 3.8rem;
+    color: #ccb48f;
+    font-style: italic;
+    font-family: $font-vollkorn;
+    line-height: 1;
+    font-weight: 400;
+
+    @include tab {
+      font-size: 3rem;
+    }
+
+    @include sp {
+      font-size: 2.2rem;
+    }
+  }
+
+  &_brand {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 2rem;
+    font-family: $font-barlow-condensed;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+
+    @include tab {
+      font-size: 1.8rem;
+      margin-top: 20px;
+    }
+
+    @include sp {
+      font-size: 1.4rem;
+      margin-top: 20px;
     }
   }
 }

@@ -1,0 +1,72 @@
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+/* ===== COMMON ===== */
+.page,
+.nav {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+
+  &:hover:not(:disabled) {
+    background: #000;
+    color: #fff;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: $gray-01;
+  }
+}
+
+.page {
+  @include sp {
+    min-width: 32px;
+    height: 32px;
+  }
+}
+
+.active {
+  background: #000;
+  color: #fff;
+}
+
+.dots {
+  padding: 0 6px;
+  color: #999;
+  user-select: none;
+}
+
+/* ===== DESKTOP ===== */
+.desktop {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  @include sp {
+    display: none;
+  }
+}
+
+/* ===== MOBILE ===== */
+.mobile {
+  display: none;
+  gap: 8px;
+  align-items: center;
+
+  @include sp {
+    display: flex;
+  }
+}

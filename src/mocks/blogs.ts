@@ -1,14 +1,17 @@
 export const blog = {
-    id: "",
-    thumbnail: "",
-    title: "",
-    date: "",
-    category: {
-        cate_id: "",
-        cate_name: "",
-        cate_slug: "",
-    },
-    description: "",
-    content: "",
-    url: "",
+  id: "",
+  thumbnail: "",
+  title: "",
+  slug: "",
+  category: {
+    _id: "",
+    slug: "",
+    name: "",
+  },
+  createdAt: "",
+  author: {
+    _id: "",
+    email: "",
+    fullName: "",
+  },
 };

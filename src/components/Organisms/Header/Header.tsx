@@ -38,7 +38,7 @@ function Header({ className }: IHeader) {
         {
           [styles.active]: isActive,
         },
-        className
+        className,
       )}
     >
       <Menu
@@ -46,43 +46,27 @@ function Header({ className }: IHeader) {
           {
             key: "1",
             title: "Sản phẩm",
-            submenu: [
-              {
-                key: "1",
-                title: "Chăm Sóc Da",
-                url: "/",
-              },
-              {
-                key: "1",
-                title: "Tắm & Dưỡng Thể",
-                url: "/",
-              },
-              {
-                key: "1",
-                title: "Chăm Sóc Tóc",
-                url: "/",
-              },
-            ],
+            url: "/san-pham",
           },
           {
             key: "2",
             title: "Bài viết",
-            url: "/blog",
+            url: "/bai-viet",
           },
           {
             key: "3",
             title: "Liên Hệ",
-            url: "/contact",
+            url: "/lien-he",
           },
           {
             key: "4",
             title: "Giỏ hàng",
-            url: "/cart",
+            url: "/gio-hang",
           },
           {
             key: "5",
             title: "Đăng nhập",
-            url: "/login",
+            url: "/dang-nhap",
           },
         ]}
         className={styles.menu_head}
