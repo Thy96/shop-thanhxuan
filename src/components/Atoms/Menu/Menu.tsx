@@ -37,6 +37,7 @@ function ClientMenu({
 }: IMenu) {
   const [isOpen, setIsOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const [openChild, setOpenChild] = useState<string | null>(null);
   const router = useRouter();
 
   const menuRef = useRef<HTMLDivElement>(null);
@@ -70,7 +71,10 @@ function ClientMenu({
               className={classNames(styles.sub_menu_overlay, {
                 [styles.sub_menu_overlay_open]: isSubOpen,
               })}
-              onClick={() => setOpenMenu(null)}
+              onClick={() => {
+                setOpenMenu(null);
+                setOpenChild(null);
+              }}
             />
             <div
               className={classNames(styles.sub_menu, {
@@ -81,22 +85,77 @@ function ClientMenu({
                 <span className={styles.sub_menu_title}>{item.title}</span>
                 <button
                   className={styles.sub_menu_close}
-                  onClick={() => setOpenMenu(null)}
+                  onClick={() => {
+                    setOpenMenu(null);
+                    setOpenChild(null);
+                  }}
                 >
                   &#x2715;
                 </button>
               </div>
               <ul className={styles.sub_menu_list}>
-                {item.submenu!.map((subitem, idx) => (
-                  <li key={idx} className={styles.sub_menu_item}>
-                    <Link
-                      href={subitem.url || "#"}
-                      onClick={() => setOpenMenu(null)}
-                    >
-                      {subitem.title}
-                    </Link>
-                  </li>
-                ))}
+                {item.submenu!.map((subitem, idx) => {
+                  const hasChildren =
+                    subitem.submenu && subitem.submenu.length > 0;
+                  const isChildOpen = openChild === subitem.title;
+                  return (
+                    <li key={idx} className={styles.sub_menu_item}>
+                      <div
+                        className={classNames(styles.sub_menu_item_row, {
+                          [styles.sub_menu_item_row_open]: isChildOpen,
+                        })}
+                        onClick={() => {
+                          if (hasChildren) {
+                            setOpenChild((prev) =>
+                              prev === subitem.title ? null : subitem.title,
+                            );
+                          }
+                        }}
+                      >
+                        {hasChildren ? (
+                          <span>{subitem.title}</span>
+                        ) : (
+                          <Link
+                            href={subitem.url || "#"}
+                            onClick={() => setOpenMenu(null)}
+                          >
+                            {subitem.title}
+                          </Link>
+                        )}
+                        {hasChildren && (
+                          <span
+                            className={classNames(styles.sub_menu_arrow, {
+                              [styles.sub_menu_arrow_open]: isChildOpen,
+                            })}
+                          >
+                            <Icons.StickHeadDownIcon width={16} height={16} />
+                          </span>
+                        )}
+                      </div>
+                      {hasChildren && (
+                        <ul
+                          className={classNames(styles.menu_children, {
+                            [styles.menu_children_open]: isChildOpen,
+                          })}
+                        >
+                          {subitem.submenu!.map((child, cidx) => (
+                            <li
+                              key={cidx}
+                              className={styles.menu_children_item}
+                            >
+                              <Link
+                                href={child.url || "#"}
+                                onClick={() => setOpenMenu(null)}
+                              >
+                                {child.title}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </React.Fragment>

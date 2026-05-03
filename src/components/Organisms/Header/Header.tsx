@@ -56,6 +56,23 @@ function Header({ className }: IHeader) {
                 key: "1-2",
                 title: "Chăm sóc tóc",
                 url: "/san-pham?category=cham-soc-toc",
+                submenu: [
+                  {
+                    key: "1-2-1",
+                    title: "Dầu gội",
+                    url: "/san-pham?category=cham-soc-toc&sub=dau-goi",
+                  },
+                  {
+                    key: "1-2-2",
+                    title: "Dầu xả",
+                    url: "/san-pham?category=cham-soc-toc&sub=dau-xa",
+                  },
+                  {
+                    key: "1-2-3",
+                    title: "Kem ủ tóc",
+                    url: "/san-pham?category=cham-soc-toc&sub=kem-u-toc",
+                  },
+                ],
               },
               {
                 key: "1-3",
