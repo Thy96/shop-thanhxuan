@@ -346,6 +346,7 @@
 .comments_action {
   border-top: 1px solid $orange-01;
   padding-top: 40px;
+  text-align: center;
 }
 
 .comments_form_title {
@@ -394,7 +395,7 @@
   }
 }
 
-.comment_submit {
+.comment_submit.comment_submit {
   align-self: flex-start;
   background: #1c1c1c;
   color: $white-01;
@@ -411,10 +412,10 @@
 .comments_login {
   display: flex;
   align-items: center;
+  flex-direction: column;
   gap: 20px;
 
   @include sp {
-    flex-direction: column;
     align-items: flex-start;
     gap: 12px;
   }
@@ -425,7 +426,7 @@
   color: $gray-04;
 }
 
-.comments_login_btn {
+.comments_login_btn.comments_login_btn {
   background: #1c1c1c;
   color: $white-01;
   padding: 12px 30px;
