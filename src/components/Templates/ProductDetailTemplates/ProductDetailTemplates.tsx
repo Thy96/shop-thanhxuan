@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -17,14 +17,21 @@ import Title from "@/components/Atoms/Title/Title";
 import Paragraph from "@/components/Atoms/Paragraph/Paragraph";
 import Carousel from "@/components/Atoms/Carousel/Carousel";
 
-export default function ProductDetailTemplate() {
+/* ─────────────────────────────────────────────
+   CommentSection – isolated component so that
+   filter/page state changes never re-render the
+   product info / carousel above.
+───────────────────────────────────────────── */
+const CommentSection = memo(function CommentSection() {
   const router = useRouter();
-  const { slug } = router.query;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [commentPage, setCommentPage] = useState(1);
   const [ratingFilter, setRatingFilter] = useState<number | null>(null);
-  const commentsSectionRef = useRef<HTMLElement>(null);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const pendingPage = useRef<number>(commentPage);
+  const pendingFilter = useRef<number | null>(ratingFilter);
 
   const COMMENTS_PER_PAGE = 5;
   const filteredComments = ratingFilter
@@ -38,33 +45,222 @@ export default function ProductDetailTemplate() {
     commentPage * COMMENTS_PER_PAGE,
   );
 
+  useEffect(() => {
+    const token = localStorage.getItem("auth_token");
+    setIsLoggedIn(!!token);
+  }, []);
+
+  function triggerTransition(applyChange: () => void) {
+    setIsAnimating(true);
+    setTimeout(() => {
+      applyChange();
+      setIsAnimating(false);
+    }, 300);
+  }
+
   function handlePageChange(page: number) {
-    setCommentPage(page);
-    commentsSectionRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
+    pendingPage.current = page;
+    triggerTransition(() => {
+      setCommentPage(page);
+      sectionRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     });
   }
 
   function handleRatingFilter(rating: number | null) {
-    setRatingFilter(rating);
-    setCommentPage(1);
+    pendingFilter.current = rating;
+    triggerTransition(() => {
+      setRatingFilter(rating);
+      setCommentPage(1);
+    });
   }
-
-  const productSlug =
-    router.isReady && typeof slug === "string" ? slug : undefined;
-
-  const {} = useProductDetail(productSlug);
-
-  useEffect(() => {
-    const token = localStorage.getItem("auth_token"); // sẽ thay đổi thành cookie sau này để login
-    setIsLoggedIn(!!token);
-  }, []);
 
   function handleSubmitComment(e: React.FormEvent) {
     e.preventDefault();
     setCommentText("");
   }
+
+  return (
+    <section className={styles.product_comments} ref={sectionRef}>
+      <div className={styles.wrapper}>
+        <Title level={2} className={styles.comments_title}>
+          Nhận xét từ khách hàng ({mockComments.length})
+        </Title>
+
+        {/* Rating filter tabs */}
+        <div className={styles.comments_filter}>
+          <button
+            className={classNames(styles.filter_tab, {
+              [styles.filter_tab_active]: ratingFilter === null,
+            })}
+            onClick={() => handleRatingFilter(null)}
+          >
+            Tất cả
+          </button>
+          {[5, 4, 3, 2, 1].map((star) => {
+            const count = mockComments.filter((c) => c.rating === star).length;
+            return (
+              <button
+                key={star}
+                className={classNames(styles.filter_tab, {
+                  [styles.filter_tab_active]: ratingFilter === star,
+                })}
+                onClick={() => handleRatingFilter(star)}
+              >
+                {star}★
+                <span className={styles.filter_tab_count}>({count})</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Comment list */}
+        <div
+          className={classNames(styles.comments_list, {
+            [styles.comments_list_animating]: isAnimating,
+          })}
+        >
+          {pagedComments.length === 0 ? (
+            <p className={styles.comments_empty}>
+              Chưa có nhận xét nào cho mức đánh giá này.
+            </p>
+          ) : (
+            pagedComments.map((comment) => (
+              <div key={comment._id} className={styles.comment_item}>
+                <div className={styles.comment_header}>
+                  <div className={styles.comment_avatar}>
+                    {comment.userId.fullName.charAt(0)}
+                  </div>
+                  <div className={styles.comment_meta}>
+                    <span className={styles.comment_author}>
+                      {comment.userId.fullName}
+                    </span>
+                    <span className={styles.comment_date}>
+                      {new Date(comment.createdAt).toLocaleDateString("vi-VN")}
+                    </span>
+                  </div>
+                  <div className={styles.comment_rating}>
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <span
+                        key={i}
+                        className={classNames(styles.star, {
+                          [styles.star_filled]: i < comment.rating,
+                        })}
+                      >
+                        ★
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <p className={styles.comment_text}>{comment.content}</p>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Pagination */}
+        {totalCommentPages > 1 && (
+          <div className={styles.comments_pagination}>
+            <button
+              className={classNames(styles.pagination_btn, {
+                [styles.pagination_btn_disabled]: commentPage === 1,
+              })}
+              onClick={() => handlePageChange(Math.max(1, commentPage - 1))}
+              disabled={commentPage === 1}
+            >
+              <Icons.ArrowLeftIcon />
+            </button>
+
+            {Array.from({ length: totalCommentPages }).map((_, i) => (
+              <button
+                key={i}
+                className={classNames(styles.pagination_btn, {
+                  [styles.pagination_btn_active]: commentPage === i + 1,
+                })}
+                onClick={() => handlePageChange(i + 1)}
+              >
+                {i + 1}
+              </button>
+            ))}
+
+            <button
+              className={classNames(styles.pagination_btn, {
+                [styles.pagination_btn_disabled]:
+                  commentPage === totalCommentPages,
+              })}
+              onClick={() =>
+                handlePageChange(Math.min(totalCommentPages, commentPage + 1))
+              }
+              disabled={commentPage === totalCommentPages}
+            >
+              <Icons.ArrowRightIcon />
+            </button>
+          </div>
+        )}
+
+        {/* Comment form or login */}
+        <div className={styles.comments_action}>
+          <Title level={3} className={styles.comments_form_title}>
+            Viết nhận xét
+          </Title>
+          {isLoggedIn ? (
+            <form
+              onSubmit={handleSubmitComment}
+              className={styles.comment_form}
+            >
+              <div className={styles.comment_form_group}>
+                <label className={styles.comment_label}>Nhận xét của bạn</label>
+                <textarea
+                  className={styles.comment_textarea}
+                  rows={4}
+                  placeholder="Chia sẻ cảm nhận của bạn về sản phẩm..."
+                  value={commentText}
+                  onChange={(e) => setCommentText(e.target.value)}
+                  required
+                />
+              </div>
+              <Button
+                type="submit"
+                htmlType="tertiary"
+                className={styles.comment_submit}
+              >
+                Gửi nhận xét
+              </Button>
+            </form>
+          ) : (
+            <div className={styles.comments_login}>
+              <p className={styles.comments_login_text}>
+                Vui lòng đăng nhập để viết nhận xét
+              </p>
+              <Button
+                type="button"
+                htmlType="tertiary"
+                className={styles.comments_login_btn}
+                onClick={() => router.push("/dang-nhap")}
+              >
+                Đăng nhập
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+});
+
+/* ─────────────────────────────────────────────
+   Main page component – no comment state here
+───────────────────────────────────────────── */
+export default function ProductDetailTemplate() {
+  const router = useRouter();
+  const { slug } = router.query;
+
+  const productSlug =
+    router.isReady && typeof slug === "string" ? slug : undefined;
+
+  const {} = useProductDetail(productSlug);
 
   return (
     <div className={styles.product}>
@@ -160,165 +356,7 @@ export default function ProductDetailTemplate() {
         </div>
       </div>
 
-      {/* COMMENTS SECTION */}
-      <section className={styles.product_comments} ref={commentsSectionRef}>
-        <div className={styles.wrapper}>
-          <Title level={2} className={styles.comments_title}>
-            Nhận xét từ khách hàng ({mockComments.length})
-          </Title>
-
-          {/* Rating filter tabs */}
-          <div className={styles.comments_filter}>
-            <button
-              className={classNames(styles.filter_tab, {
-                [styles.filter_tab_active]: ratingFilter === null,
-              })}
-              onClick={() => handleRatingFilter(null)}
-            >
-              Tất cả
-            </button>
-            {[5, 4, 3, 2, 1].map((star) => {
-              const count = mockComments.filter(
-                (c) => c.rating === star,
-              ).length;
-              return (
-                <button
-                  key={star}
-                  className={classNames(styles.filter_tab, {
-                    [styles.filter_tab_active]: ratingFilter === star,
-                  })}
-                  onClick={() => handleRatingFilter(star)}
-                >
-                  {star}★
-                  <span className={styles.filter_tab_count}>({count})</span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Comment list */}
-          <div className={styles.comments_list}>
-            {pagedComments.map((comment) => (
-              <div key={comment._id} className={styles.comment_item}>
-                <div className={styles.comment_header}>
-                  <div className={styles.comment_avatar}>
-                    {comment.userId.fullName.charAt(0)}
-                  </div>
-                  <div className={styles.comment_meta}>
-                    <span className={styles.comment_author}>
-                      {comment.userId.fullName}
-                    </span>
-                    <span className={styles.comment_date}>
-                      {new Date(comment.createdAt).toLocaleDateString("vi-VN")}
-                    </span>
-                  </div>
-                  <div className={styles.comment_rating}>
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <span
-                        key={i}
-                        className={classNames(styles.star, {
-                          [styles.star_filled]: i < comment.rating,
-                        })}
-                      >
-                        ★
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <p className={styles.comment_text}>{comment.content}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Pagination */}
-          {totalCommentPages > 1 && (
-            <div className={styles.comments_pagination}>
-              <button
-                className={classNames(styles.pagination_btn, {
-                  [styles.pagination_btn_disabled]: commentPage === 1,
-                })}
-                onClick={() => handlePageChange(Math.max(1, commentPage - 1))}
-                disabled={commentPage === 1}
-              >
-                <Icons.ArrowLeftIcon />
-              </button>
-
-              {Array.from({ length: totalCommentPages }).map((_, i) => (
-                <button
-                  key={i}
-                  className={classNames(styles.pagination_btn, {
-                    [styles.pagination_btn_active]: commentPage === i + 1,
-                  })}
-                  onClick={() => handlePageChange(i + 1)}
-                >
-                  {i + 1}
-                </button>
-              ))}
-
-              <button
-                className={classNames(styles.pagination_btn, {
-                  [styles.pagination_btn_disabled]:
-                    commentPage === totalCommentPages,
-                })}
-                onClick={() =>
-                  handlePageChange(Math.min(totalCommentPages, commentPage + 1))
-                }
-                disabled={commentPage === totalCommentPages}
-              >
-                <Icons.ArrowRightIcon />
-              </button>
-            </div>
-          )}
-
-          {/* Comment form or login */}
-          <div className={styles.comments_action}>
-            <Title level={3} className={styles.comments_form_title}>
-              Viết nhận xét
-            </Title>
-            {isLoggedIn ? (
-              <form
-                onSubmit={handleSubmitComment}
-                className={styles.comment_form}
-              >
-                <div className={styles.comment_form_group}>
-                  <label className={styles.comment_label}>
-                    Nhận xét của bạn
-                  </label>
-                  <textarea
-                    className={styles.comment_textarea}
-                    rows={4}
-                    placeholder="Chia sẻ cảm nhận của bạn về sản phẩm..."
-                    value={commentText}
-                    onChange={(e) => setCommentText(e.target.value)}
-                    required
-                  />
-                </div>
-                <Button
-                  type="submit"
-                  htmlType="tertiary"
-                  className={styles.comment_submit}
-                >
-                  Gửi nhận xét
-                </Button>
-              </form>
-            ) : (
-              <div className={styles.comments_login}>
-                <p className={styles.comments_login_text}>
-                  Vui lòng đăng nhập để viết nhận xét
-                </p>
-                <Button
-                  type="button"
-                  htmlType="tertiary"
-                  className={styles.comments_login_btn}
-                  onClick={() => router.push("/dang-nhap")}
-                >
-                  Đăng nhập
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
+      <CommentSection />
     </div>
   );
 }
