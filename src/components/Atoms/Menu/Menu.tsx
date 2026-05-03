@@ -59,26 +59,49 @@ function ClientMenu({
     };
   }, []);
 
-  const renderSubMenu = (submenu: MenuItem[], isSubOpen: boolean) => (
-    <>
-      <div
-        className={classNames(styles.triangle_up, {
-          [styles.visible]: isSubOpen,
-        })}
-      />
-      <ul
-        className={classNames(styles.sub_menu, {
-          [styles.sub_menu_open]: isSubOpen,
-        })}
-      >
-        {submenu.map((subitem, index) => (
-          <li key={index} className={styles.sub_menu_item}>
-            <Link href={subitem.url || "#"}>{subitem.title}</Link>
-          </li>
-        ))}
-      </ul>
-    </>
-  );
+  const renderPanels = () =>
+    [...items, ...rightItems]
+      .filter((item) => item.submenu)
+      .map((item, index) => {
+        const isSubOpen = openMenu === item.title;
+        return (
+          <React.Fragment key={index}>
+            <div
+              className={classNames(styles.sub_menu_overlay, {
+                [styles.sub_menu_overlay_open]: isSubOpen,
+              })}
+              onClick={() => setOpenMenu(null)}
+            />
+            <div
+              className={classNames(styles.sub_menu, {
+                [styles.sub_menu_open]: isSubOpen,
+              })}
+            >
+              <div className={styles.sub_menu_header}>
+                <span className={styles.sub_menu_title}>{item.title}</span>
+                <button
+                  className={styles.sub_menu_close}
+                  onClick={() => setOpenMenu(null)}
+                >
+                  &#x2715;
+                </button>
+              </div>
+              <ul className={styles.sub_menu_list}>
+                {item.submenu!.map((subitem, idx) => (
+                  <li key={idx} className={styles.sub_menu_item}>
+                    <Link
+                      href={subitem.url || "#"}
+                      onClick={() => setOpenMenu(null)}
+                    >
+                      {subitem.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </React.Fragment>
+        );
+      });
 
   const renderItems = (itemList: MenuItem[]) =>
     itemList.map((item, index) => {
@@ -114,7 +137,6 @@ function ClientMenu({
               </span>
             )}
           </Link>
-          {item.submenu && renderSubMenu(item.submenu, isSubOpen)}
         </li>
       );
     });
@@ -145,6 +167,9 @@ function ClientMenu({
       >
         {renderItems([...items, ...rightItems])}
       </ul>
+
+      {/* Submenu panels */}
+      {renderPanels()}
     </nav>
   );
 }
