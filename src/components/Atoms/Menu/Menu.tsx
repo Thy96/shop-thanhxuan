@@ -65,6 +65,9 @@ function ClientMenu({
       .filter((item) => item.submenu)
       .map((item, index) => {
         const isSubOpen = openMenu === item.title;
+        const activeChild = item.submenu!.find(
+          (sub) => sub.title === openChild && sub.submenu?.length,
+        );
         return (
           <React.Fragment key={index}>
             <div
@@ -76,6 +79,8 @@ function ClientMenu({
                 setOpenChild(null);
               }}
             />
+
+            {/* Panel cấp 2: submenu */}
             <div
               className={classNames(styles.sub_menu, {
                 [styles.sub_menu_open]: isSubOpen,
@@ -97,12 +102,12 @@ function ClientMenu({
                 {item.submenu!.map((subitem, idx) => {
                   const hasChildren =
                     subitem.submenu && subitem.submenu.length > 0;
-                  const isChildOpen = openChild === subitem.title;
                   return (
                     <li key={idx} className={styles.sub_menu_item}>
                       <div
                         className={classNames(styles.sub_menu_item_row, {
-                          [styles.sub_menu_item_row_open]: isChildOpen,
+                          [styles.sub_menu_item_row_active]:
+                            openChild === subitem.title && hasChildren,
                         })}
                         onClick={() => {
                           if (hasChildren) {
@@ -123,39 +128,53 @@ function ClientMenu({
                           </Link>
                         )}
                         {hasChildren && (
-                          <span
-                            className={classNames(styles.sub_menu_arrow, {
-                              [styles.sub_menu_arrow_open]: isChildOpen,
-                            })}
-                          >
-                            <Icons.StickHeadDownIcon width={16} height={16} />
+                          <span className={styles.sub_menu_arrow}>
+                            <Icons.StickHeadRightIcon width={16} height={16} />
                           </span>
                         )}
                       </div>
-                      {hasChildren && (
-                        <ul
-                          className={classNames(styles.menu_children, {
-                            [styles.menu_children_open]: isChildOpen,
-                          })}
-                        >
-                          {subitem.submenu!.map((child, cidx) => (
-                            <li
-                              key={cidx}
-                              className={styles.menu_children_item}
-                            >
-                              <Link
-                                href={child.url || "#"}
-                                onClick={() => setOpenMenu(null)}
-                              >
-                                {child.title}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
                     </li>
                   );
                 })}
+              </ul>
+            </div>
+
+            {/* Panel cấp 3: children trượt vào từ trái */}
+            <div
+              className={classNames(styles.child_panel, {
+                [styles.child_panel_open]: !!activeChild && isSubOpen,
+              })}
+            >
+              <div className={styles.sub_menu_header}>
+                <span className={styles.child_panel_title}>
+                  {activeChild?.title}
+                </span>
+                <button
+                  className={styles.sub_menu_close}
+                  onClick={() => {
+                    setOpenMenu(null);
+                    setOpenChild(null);
+                  }}
+                >
+                  &#x2715;
+                </button>
+              </div>
+              <ul className={styles.sub_menu_list}>
+                {activeChild?.submenu?.map((child, cidx) => (
+                  <li key={cidx} className={styles.sub_menu_item}>
+                    <div className={styles.sub_menu_item_row}>
+                      <Link
+                        href={child.url || "#"}
+                        onClick={() => {
+                          setOpenMenu(null);
+                          setOpenChild(null);
+                        }}
+                      >
+                        {child.title}
+                      </Link>
+                    </div>
+                  </li>
+                ))}
               </ul>
             </div>
           </React.Fragment>
