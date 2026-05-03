@@ -218,6 +218,13 @@
       justify-content: space-between;
       cursor: pointer;
       padding: 16px 0;
+      font-size: 1.6rem;
+      color: $black-01;
+      transition: color 0.2s;
+      flex: 1;
+      &:hover {
+        color: $orange-03;
+      }
       a {
         font-size: 1.6rem;
         color: $black-01;

@@ -112,35 +112,32 @@ function ClientMenu({
                     subitem.submenu && subitem.submenu.length > 0;
                   return (
                     <li key={idx} className={styles.sub_menu_item}>
-                      <div
-                        className={classNames(styles.sub_menu_item_row, {
-                          [styles.sub_menu_item_row_active]:
-                            openChild === subitem.title && hasChildren,
-                        })}
-                        onClick={() => {
-                          if (hasChildren) {
+                      {hasChildren ? (
+                        <div
+                          className={classNames(styles.sub_menu_item_row, {
+                            [styles.sub_menu_item_row_active]:
+                              openChild === subitem.title,
+                          })}
+                          onClick={() =>
                             setOpenChild((prev) =>
                               prev === subitem.title ? null : subitem.title,
-                            );
+                            )
                           }
-                        }}
-                      >
-                        {hasChildren ? (
+                        >
                           <span>{subitem.title}</span>
-                        ) : (
-                          <Link
-                            href={subitem.url || "#"}
-                            onClick={() => setOpenMenu(null)}
-                          >
-                            {subitem.title}
-                          </Link>
-                        )}
-                        {hasChildren && (
                           <span className={styles.sub_menu_arrow}>
                             <Icons.StickHeadRightIcon width={16} height={16} />
                           </span>
-                        )}
-                      </div>
+                        </div>
+                      ) : (
+                        <Link
+                          className={styles.sub_menu_item_row}
+                          href={subitem.url || "#"}
+                          onClick={() => setOpenMenu(null)}
+                        >
+                          {subitem.title}
+                        </Link>
+                      )}
                     </li>
                   );
                 })}
@@ -178,17 +175,16 @@ function ClientMenu({
               <ul className={styles.sub_menu_list}>
                 {activeChild?.submenu?.map((child, cidx) => (
                   <li key={cidx} className={styles.sub_menu_item}>
-                    <div className={styles.sub_menu_item_row}>
-                      <Link
-                        href={child.url || "#"}
-                        onClick={() => {
-                          setOpenMenu(null);
-                          setOpenChild(null);
-                        }}
-                      >
-                        {child.title}
-                      </Link>
-                    </div>
+                    <Link
+                      className={styles.sub_menu_item_row}
+                      href={child.url || "#"}
+                      onClick={() => {
+                        setOpenMenu(null);
+                        setOpenChild(null);
+                      }}
+                    >
+                      {child.title}
+                    </Link>
                   </li>
                 ))}
               </ul>
