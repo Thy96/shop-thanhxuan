@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -23,12 +23,33 @@ export default function ProductDetailTemplate() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [commentPage, setCommentPage] = useState(1);
+  const [ratingFilter, setRatingFilter] = useState<number | null>(null);
+  const commentsSectionRef = useRef<HTMLElement>(null);
+
   const COMMENTS_PER_PAGE = 5;
-  const totalCommentPages = Math.ceil(mockComments.length / COMMENTS_PER_PAGE);
-  const pagedComments = mockComments.slice(
+  const filteredComments = ratingFilter
+    ? mockComments.filter((c) => c.rating === ratingFilter)
+    : mockComments;
+  const totalCommentPages = Math.ceil(
+    filteredComments.length / COMMENTS_PER_PAGE,
+  );
+  const pagedComments = filteredComments.slice(
     (commentPage - 1) * COMMENTS_PER_PAGE,
     commentPage * COMMENTS_PER_PAGE,
   );
+
+  function handlePageChange(page: number) {
+    setCommentPage(page);
+    commentsSectionRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+
+  function handleRatingFilter(rating: number | null) {
+    setRatingFilter(rating);
+    setCommentPage(1);
+  }
 
   const productSlug =
     router.isReady && typeof slug === "string" ? slug : undefined;
@@ -140,11 +161,40 @@ export default function ProductDetailTemplate() {
       </div>
 
       {/* COMMENTS SECTION */}
-      <section className={styles.product_comments}>
+      <section className={styles.product_comments} ref={commentsSectionRef}>
         <div className={styles.wrapper}>
           <Title level={2} className={styles.comments_title}>
             Nhận xét từ khách hàng ({mockComments.length})
           </Title>
+
+          {/* Rating filter tabs */}
+          <div className={styles.comments_filter}>
+            <button
+              className={classNames(styles.filter_tab, {
+                [styles.filter_tab_active]: ratingFilter === null,
+              })}
+              onClick={() => handleRatingFilter(null)}
+            >
+              Tất cả
+            </button>
+            {[5, 4, 3, 2, 1].map((star) => {
+              const count = mockComments.filter(
+                (c) => c.rating === star,
+              ).length;
+              return (
+                <button
+                  key={star}
+                  className={classNames(styles.filter_tab, {
+                    [styles.filter_tab_active]: ratingFilter === star,
+                  })}
+                  onClick={() => handleRatingFilter(star)}
+                >
+                  {star}★
+                  <span className={styles.filter_tab_count}>({count})</span>
+                </button>
+              );
+            })}
+          </div>
 
           {/* Comment list */}
           <div className={styles.comments_list}>
@@ -187,10 +237,10 @@ export default function ProductDetailTemplate() {
                 className={classNames(styles.pagination_btn, {
                   [styles.pagination_btn_disabled]: commentPage === 1,
                 })}
-                onClick={() => setCommentPage((p) => Math.max(1, p - 1))}
+                onClick={() => handlePageChange(Math.max(1, commentPage - 1))}
                 disabled={commentPage === 1}
               >
-                &#8592;
+                <Icons.ArrowLeftIcon />
               </button>
 
               {Array.from({ length: totalCommentPages }).map((_, i) => (
@@ -199,7 +249,7 @@ export default function ProductDetailTemplate() {
                   className={classNames(styles.pagination_btn, {
                     [styles.pagination_btn_active]: commentPage === i + 1,
                   })}
-                  onClick={() => setCommentPage(i + 1)}
+                  onClick={() => handlePageChange(i + 1)}
                 >
                   {i + 1}
                 </button>
@@ -211,11 +261,11 @@ export default function ProductDetailTemplate() {
                     commentPage === totalCommentPages,
                 })}
                 onClick={() =>
-                  setCommentPage((p) => Math.min(totalCommentPages, p + 1))
+                  handlePageChange(Math.min(totalCommentPages, commentPage + 1))
                 }
                 disabled={commentPage === totalCommentPages}
               >
-                &#8594;
+                <Icons.ArrowRightIcon />
               </button>
             </div>
           )}
