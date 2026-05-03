@@ -87,10 +87,18 @@ function ClientMenu({
               })}
             >
               <div className={styles.sub_menu_header}>
+                <button
+                  className={styles.back_btn}
+                  onClick={() => setOpenMenu(null)}
+                >
+                  <Icons.StickHeadLeftIcon width={16} height={16} />
+                  <span>Quay lại</span>
+                </button>
                 <span className={styles.sub_menu_title}>{item.title}</span>
                 <button
                   className={styles.sub_menu_close}
                   onClick={() => {
+                    setIsOpen(false);
                     setOpenMenu(null);
                     setOpenChild(null);
                   }}
@@ -146,12 +154,20 @@ function ClientMenu({
               })}
             >
               <div className={styles.sub_menu_header}>
+                <button
+                  className={styles.back_btn}
+                  onClick={() => setOpenChild(null)}
+                >
+                  <Icons.StickHeadLeftIcon width={16} height={16} />
+                  <span>Quay lại</span>
+                </button>
                 <span className={styles.child_panel_title}>
                   {activeChild?.title}
                 </span>
                 <button
                   className={styles.sub_menu_close}
                   onClick={() => {
+                    setIsOpen(false);
                     setOpenMenu(null);
                     setOpenChild(null);
                   }}
@@ -180,6 +196,30 @@ function ClientMenu({
           </React.Fragment>
         );
       });
+
+  const renderMobilePanelItems = (itemList: MenuItem[]) =>
+    itemList.map((item, index) => (
+      <li
+        key={index}
+        className={styles.mobile_panel_item}
+        onClick={() => {
+          if (item.submenu) toggleSubMenu(item.title);
+        }}
+      >
+        {item.submenu ? (
+          <>
+            <span className={styles.mobile_panel_item_label}>{item.title}</span>
+            <span className={styles.mobile_panel_item_arrow}>
+              <Icons.StickHeadRightIcon width={16} height={16} />
+            </span>
+          </>
+        ) : (
+          <Link href={item.url || "#"} onClick={() => setIsOpen(false)}>
+            {item.title}
+          </Link>
+        )}
+      </li>
+    ));
 
   const renderItems = (itemList: MenuItem[]) =>
     itemList.map((item, index) => {
@@ -237,14 +277,36 @@ function ClientMenu({
       {/* Mobile: hamburger (hidden on desktop via CSS) */}
       <Hamburger isOpen={isOpen} toggle={toggleMenu} />
 
-      {/* Mobile: combined dropdown */}
-      <ul
-        className={classNames(styles.mobile_menu, {
-          [styles.open]: isOpen,
+      {/* Mobile: overlay */}
+      <div
+        className={classNames(styles.mobile_overlay, {
+          [styles.mobile_overlay_open]: isOpen,
+        })}
+        onClick={() => {
+          setIsOpen(false);
+          setOpenMenu(null);
+          setOpenChild(null);
+        }}
+      />
+
+      {/* Mobile: slide panel */}
+      <div
+        className={classNames(styles.mobile_panel, {
+          [styles.mobile_panel_open]: isOpen,
         })}
       >
-        {renderItems([...items, ...rightItems])}
-      </ul>
+        <div className={styles.mobile_panel_header}>
+          <button
+            className={styles.mobile_panel_close}
+            onClick={() => setIsOpen(false)}
+          >
+            &#x2715;
+          </button>
+        </div>
+        <ul className={styles.mobile_panel_list}>
+          {renderMobilePanelItems([...items, ...rightItems])}
+        </ul>
+      </div>
 
       {/* Submenu panels */}
       {renderPanels()}

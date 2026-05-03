@@ -182,6 +182,10 @@
     font-size: 1.8rem;
     font-weight: 600;
     color: $black-01;
+    @include sp {
+      flex: 1;
+      text-align: center;
+    }
   }
 
   .sub_menu_close {
@@ -286,70 +290,130 @@
     font-size: 1.8rem;
     font-weight: 600;
     color: $black-01;
+    @include sp {
+      flex: 1;
+      text-align: center;
+    }
   }
 
-  .mobile_menu {
+  .mobile_overlay {
+    display: none;
+    @include sp {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 97;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition:
+        opacity 0.35s ease,
+        visibility 0.35s ease;
+      &.mobile_overlay_open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+    }
+  }
+
+  .mobile_panel {
     display: none;
     @include sp {
       display: flex;
       flex-direction: column;
-      list-style: none;
-      background: white;
-      position: absolute;
-      top: 100%;
+      position: fixed;
+      top: 0;
       left: 0;
-      width: 100%;
-      gap: 0;
-      overflow: hidden;
-      max-height: 0;
-      opacity: 0;
-      pointer-events: none;
-      transition:
-        max-height 0.4s ease,
-        opacity 0.3s ease;
-      z-index: 3;
-    }
-    &.open {
-      @include sp {
-        max-height: 600px;
-        opacity: 1;
-        pointer-events: auto;
-        padding: 0 10px;
+      width: 80vw;
+      height: 100vh;
+      background: white;
+      z-index: 98;
+      overflow-y: auto;
+      transform: translateX(-100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      &.mobile_panel_open {
+        transform: translateX(0);
       }
     }
-    .main_menu_item {
-      position: relative;
+  }
+
+  .mobile_panel_header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 20px;
+    border-bottom: 1px solid $gray-03;
+  }
+
+  .mobile_panel_close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 2rem;
+    color: $black-01;
+    transition: color 0.2s;
+    &:hover {
+      color: $orange-03;
+    }
+  }
+
+  .mobile_panel_list {
+    list-style: none;
+    padding: 0 20px;
+    flex: 1;
+  }
+
+  .mobile_panel_item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+    border-bottom: 1px solid $gray-03;
+    cursor: pointer;
+    &:last-child {
+      border-bottom: none;
+    }
+    .mobile_panel_item_label {
+      flex: 1;
+      font-size: 1.6rem;
+      color: $black-01;
+    }
+    .mobile_panel_item_arrow {
+      display: inline-flex;
+      color: $gray-02;
+    }
+    a {
+      display: block;
+      flex: 1;
+      font-size: 1.6rem;
+      color: $black-01;
+      transition: color 0.2s;
+      &:hover {
+        color: $orange-03;
+      }
+    }
+  }
+
+  .back_btn {
+    display: none;
+    @include sp {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      cursor: pointer;
       font-size: 1.4rem;
-      &::after {
-        position: absolute;
-        content: "";
-        background: $gray-03;
-        width: 100%;
-        height: 1px;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-      }
-      &:first-child {
-        padding-top: 5px;
-      }
-      &:last-child {
-        padding-bottom: 5px;
-        &::after {
-          display: none;
-        }
-      }
-      &.click_active {
-        background: $orange-01;
-      }
-      &.active {
-        background: $orange-01;
-      }
-      a {
-        display: flex;
-        width: 100%;
-        justify-content: space-between;
-        padding: 10px;
+      color: $black-01;
+      padding: 0;
+      transition: color 0.2s;
+      &:hover {
+        color: $orange-03;
       }
     }
   }
