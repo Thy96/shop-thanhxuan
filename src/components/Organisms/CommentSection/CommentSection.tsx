@@ -8,7 +8,7 @@ import Button from "@/components/Atoms/Button";
 import Title from "@/components/Atoms/Title/Title";
 import Pagination from "@/components/Organisms/Pagination/Pagination";
 
-import styles from "@/components/Templates/ProductDetailTemplates/ProductDetailTemplates.module.scss";
+import styles from "@/components/Organisms/CommentSection/CommentSection.module.scss";
 
 const CommentSection = memo(function CommentSection() {
   const router = useRouter();
