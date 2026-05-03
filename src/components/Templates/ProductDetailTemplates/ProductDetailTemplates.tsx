@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -16,18 +16,103 @@ import Paragraph from "@/components/Atoms/Paragraph/Paragraph";
 import Carousel from "@/components/Atoms/Carousel/Carousel";
 import { product } from "@/lib/database/product";
 
+interface Comment {
+  _id: string;
+  productId: string;
+  userId: {
+    _id: string;
+    fullName: string;
+    email: string;
+  };
+  content: string;
+  rating: number;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+const mockComments: Comment[] = [
+  {
+    _id: "69f0e03d231e5b7abc34e3ca",
+    productId: "69a3cff9cca129a9594bb49c",
+    userId: {
+      _id: "69d6647afc81a513ff620440",
+      fullName: "Nguyễn Thị Lan",
+      email: "lan.nguyen@example.com",
+    },
+    content:
+      "Sản phẩm rất tốt, mùi hương dịu nhẹ, dùng xong da mềm mịn hẳn. Sẽ mua lại lần sau!",
+    rating: 5,
+    createdAt: "2026-04-10T08:14:22.000Z",
+    updatedAt: "2026-04-10T08:14:22.000Z",
+    __v: 0,
+  },
+  {
+    _id: "69f0e03d231e5b7abc34e3cb",
+    productId: "69a3cff9cca129a9594bb49c",
+    userId: {
+      _id: "69d6647afc81a513ff620441",
+      fullName: "Trần Minh Huy",
+      email: "huy.tran@example.com",
+    },
+    content:
+      "Chất lượng ổn, giao hàng nhanh. Bao bì đẹp, làm quà tặng rất ý nghĩa.",
+    rating: 4,
+    createdAt: "2026-03-25T10:45:00.000Z",
+    updatedAt: "2026-03-25T10:45:00.000Z",
+    __v: 0,
+  },
+  {
+    _id: "69f0e03d231e5b7abc34e3cc",
+    productId: "69a3cff9cca129a9594bb49c",
+    userId: {
+      _id: "69d6647afc81a513ff620442",
+      fullName: "Phạm Thu Hà",
+      email: "ha.pham@example.com",
+    },
+    content: "Hơi lâu giao nhưng sản phẩm ổn.",
+    rating: 4,
+    createdAt: "2026-04-28T16:28:45.478Z",
+    updatedAt: "2026-04-28T16:28:45.478Z",
+    __v: 0,
+  },
+  {
+    _id: "69f0e03d231e5b7abc34e3cd",
+    productId: "69a3cff9cca129a9594bb49c",
+    userId: {
+      _id: "69d6647afc81a513ff620443",
+      fullName: "Lê Thị Bích Ngọc",
+      email: "ngoc.le@example.com",
+    },
+    content:
+      "Mình đã dùng thử mẫu trước khi mua, thực sự rất thích. Sẽ tiếp tục ủng hộ shop!",
+    rating: 5,
+    createdAt: "2026-03-12T14:30:10.000Z",
+    updatedAt: "2026-03-12T14:30:10.000Z",
+    __v: 0,
+  },
+];
+
 export default function ProductDetailTemplate() {
   const router = useRouter();
   const { slug } = router.query;
-  const [expanded, setExpanded] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [commentText, setCommentText] = useState("");
 
   const productSlug =
     router.isReady && typeof slug === "string" ? slug : undefined;
 
   const {} = useProductDetail(productSlug);
 
-  // if (isLoadingProduct) return <p>Loading...</p>;
-  // if (!product) return <p>Không tìm thấy sản phẩm</p>;
+  useEffect(() => {
+    const token = localStorage.getItem("auth_token");
+    setIsLoggedIn(!!token);
+  }, []);
+
+  function handleSubmitComment(e: React.FormEvent) {
+    e.preventDefault();
+    setCommentText("");
+  }
 
   return (
     <div className={styles.product}>
@@ -117,33 +202,102 @@ export default function ProductDetailTemplate() {
 
       <div className={classNames(styles.product_editor)}>
         <div className={styles.wrapper}>
-          <div
-            className={classNames(styles.product_content, {
-              [styles.product_expanded]: expanded,
-            })}
-          >
-            <div className={styles.product_inner}>
-              {product.content && (
-                <div dangerouslySetInnerHTML={{ __html: product.content }} />
-              )}
-            </div>
+          {product.content && (
+            <div dangerouslySetInnerHTML={{ __html: product.content }} />
+          )}
+        </div>
+      </div>
+
+      {/* COMMENTS SECTION */}
+      <section className={styles.product_comments}>
+        <div className={styles.wrapper}>
+          <Title level={2} className={styles.comments_title}>
+            Nhận xét từ khách hàng ({mockComments.length})
+          </Title>
+
+          {/* Comment list */}
+          <div className={styles.comments_list}>
+            {mockComments.map((comment) => (
+              <div key={comment._id} className={styles.comment_item}>
+                <div className={styles.comment_header}>
+                  <div className={styles.comment_avatar}>
+                    {comment.userId.fullName.charAt(0)}
+                  </div>
+                  <div className={styles.comment_meta}>
+                    <span className={styles.comment_author}>
+                      {comment.userId.fullName}
+                    </span>
+                    <span className={styles.comment_date}>
+                      {new Date(comment.createdAt).toLocaleDateString("vi-VN")}
+                    </span>
+                  </div>
+                  <div className={styles.comment_rating}>
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <span
+                        key={i}
+                        className={classNames(styles.star, {
+                          [styles.star_filled]: i < comment.rating,
+                        })}
+                      >
+                        ★
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <p className={styles.comment_text}>{comment.content}</p>
+              </div>
+            ))}
           </div>
-          <div
-            className={styles.product_toggleBtn}
-            onClick={() => setExpanded(!expanded)}
-          >
-            {expanded ? (
-              <span className={styles.product_arrup}>
-                <Icons.ArrowDownIcon expanded />
-              </span>
+
+          {/* Comment form or login */}
+          <div className={styles.comments_action}>
+            <Title level={3} className={styles.comments_form_title}>
+              Viết nhận xét
+            </Title>
+            {isLoggedIn ? (
+              <form
+                onSubmit={handleSubmitComment}
+                className={styles.comment_form}
+              >
+                <div className={styles.comment_form_group}>
+                  <label className={styles.comment_label}>
+                    Nhận xét của bạn
+                  </label>
+                  <textarea
+                    className={styles.comment_textarea}
+                    rows={4}
+                    placeholder="Chia sẻ cảm nhận của bạn về sản phẩm..."
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                    required
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  htmlType="tertiary"
+                  className={styles.comment_submit}
+                >
+                  Gửi nhận xét
+                </Button>
+              </form>
             ) : (
-              <span className={styles.product_arrdown}>
-                <Icons.ArrowDownIcon />
-              </span>
+              <div className={styles.comments_login}>
+                <p className={styles.comments_login_text}>
+                  Vui lòng đăng nhập để viết nhận xét
+                </p>
+                <Button
+                  type="button"
+                  htmlType="tertiary"
+                  className={styles.comments_login_btn}
+                  onClick={() => router.push("/dang-nhap")}
+                >
+                  Đăng nhập
+                </Button>
+              </div>
             )}
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
