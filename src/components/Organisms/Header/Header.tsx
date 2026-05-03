@@ -58,6 +58,8 @@ function Header({ className }: IHeader) {
             title: "Liên Hệ",
             url: "/lien-he",
           },
+        ]}
+        rightItems={[
           {
             key: "4",
             title: "Giỏ hàng",

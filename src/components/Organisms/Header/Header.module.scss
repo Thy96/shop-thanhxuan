@@ -3,7 +3,9 @@
 
 .wrapper {
   width: 100%;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
   position: absolute;
   top: 0;
   left: 0;
@@ -14,24 +16,17 @@
     padding-bottom: 0;
   }
   .menu_head {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
     @include sp {
       flex-wrap: nowrap;
       justify-content: space-between;
     }
   }
   .logo {
-    margin-bottom: 10px;
-    width: 100%;
     text-align: center;
     a {
       display: inline-block;
     }
     @include sp {
-      margin-bottom: 0;
       padding-left: 40px;
     }
   }
