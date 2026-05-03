@@ -60,12 +60,9 @@ const CommentSection = memo(function CommentSection() {
 
   function handlePageChange(page: number) {
     pendingPage.current = page;
+    sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     triggerTransition(() => {
       setCommentPage(page);
-      sectionRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
     });
   }
 
