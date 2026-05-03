@@ -46,7 +46,28 @@ function Header({ className }: IHeader) {
           {
             key: "1",
             title: "Sản phẩm",
-            url: "/san-pham",
+            submenu: [
+              {
+                key: "1-1",
+                title: "Sản phẩm mới",
+                url: "/san-pham",
+              },
+              {
+                key: "1-2",
+                title: "Chăm sóc tóc",
+                url: "/san-pham?category=cham-soc-toc",
+              },
+              {
+                key: "1-3",
+                title: "Chăm sóc da",
+                url: "/san-pham?category=cham-soc-da",
+              },
+              {
+                key: "1-4",
+                title: "Tắm và dưỡng thể",
+                url: "/san-pham?category=tam-va-duong-the",
+              },
+            ],
           },
           {
             key: "2",

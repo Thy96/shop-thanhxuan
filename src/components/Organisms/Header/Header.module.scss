@@ -10,11 +10,8 @@
   top: 0;
   left: 0;
   right: 0;
-  padding-bottom: 20px;
   z-index: 10;
-  @include sp {
-    padding-bottom: 0;
-  }
+  padding: 0 20px;
   .menu_head {
     @include sp {
       flex-wrap: nowrap;
