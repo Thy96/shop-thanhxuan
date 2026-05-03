@@ -6,6 +6,8 @@ import Image from "next/image";
 import { useProductDetail } from "@/services/api";
 import { formatCurrency } from "@/utils/helper";
 
+import { mockComments, product } from "@/lib/database/product";
+
 import styles from "./ProductDetailTemplates.module.scss";
 import classNames from "classnames";
 
@@ -14,90 +16,19 @@ import Icons from "@/components/Atoms/Icons/Icons";
 import Title from "@/components/Atoms/Title/Title";
 import Paragraph from "@/components/Atoms/Paragraph/Paragraph";
 import Carousel from "@/components/Atoms/Carousel/Carousel";
-import { product } from "@/lib/database/product";
-
-interface Comment {
-  _id: string;
-  productId: string;
-  userId: {
-    _id: string;
-    fullName: string;
-    email: string;
-  };
-  content: string;
-  rating: number;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-}
-
-const mockComments: Comment[] = [
-  {
-    _id: "69f0e03d231e5b7abc34e3ca",
-    productId: "69a3cff9cca129a9594bb49c",
-    userId: {
-      _id: "69d6647afc81a513ff620440",
-      fullName: "Nguyễn Thị Lan",
-      email: "lan.nguyen@example.com",
-    },
-    content:
-      "Sản phẩm rất tốt, mùi hương dịu nhẹ, dùng xong da mềm mịn hẳn. Sẽ mua lại lần sau!",
-    rating: 5,
-    createdAt: "2026-04-10T08:14:22.000Z",
-    updatedAt: "2026-04-10T08:14:22.000Z",
-    __v: 0,
-  },
-  {
-    _id: "69f0e03d231e5b7abc34e3cb",
-    productId: "69a3cff9cca129a9594bb49c",
-    userId: {
-      _id: "69d6647afc81a513ff620441",
-      fullName: "Trần Minh Huy",
-      email: "huy.tran@example.com",
-    },
-    content:
-      "Chất lượng ổn, giao hàng nhanh. Bao bì đẹp, làm quà tặng rất ý nghĩa.",
-    rating: 4,
-    createdAt: "2026-03-25T10:45:00.000Z",
-    updatedAt: "2026-03-25T10:45:00.000Z",
-    __v: 0,
-  },
-  {
-    _id: "69f0e03d231e5b7abc34e3cc",
-    productId: "69a3cff9cca129a9594bb49c",
-    userId: {
-      _id: "69d6647afc81a513ff620442",
-      fullName: "Phạm Thu Hà",
-      email: "ha.pham@example.com",
-    },
-    content: "Hơi lâu giao nhưng sản phẩm ổn.",
-    rating: 4,
-    createdAt: "2026-04-28T16:28:45.478Z",
-    updatedAt: "2026-04-28T16:28:45.478Z",
-    __v: 0,
-  },
-  {
-    _id: "69f0e03d231e5b7abc34e3cd",
-    productId: "69a3cff9cca129a9594bb49c",
-    userId: {
-      _id: "69d6647afc81a513ff620443",
-      fullName: "Lê Thị Bích Ngọc",
-      email: "ngoc.le@example.com",
-    },
-    content:
-      "Mình đã dùng thử mẫu trước khi mua, thực sự rất thích. Sẽ tiếp tục ủng hộ shop!",
-    rating: 5,
-    createdAt: "2026-03-12T14:30:10.000Z",
-    updatedAt: "2026-03-12T14:30:10.000Z",
-    __v: 0,
-  },
-];
 
 export default function ProductDetailTemplate() {
   const router = useRouter();
   const { slug } = router.query;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [commentText, setCommentText] = useState("");
+  const [commentPage, setCommentPage] = useState(1);
+  const COMMENTS_PER_PAGE = 5;
+  const totalCommentPages = Math.ceil(mockComments.length / COMMENTS_PER_PAGE);
+  const pagedComments = mockComments.slice(
+    (commentPage - 1) * COMMENTS_PER_PAGE,
+    commentPage * COMMENTS_PER_PAGE,
+  );
 
   const productSlug =
     router.isReady && typeof slug === "string" ? slug : undefined;
@@ -105,7 +36,7 @@ export default function ProductDetailTemplate() {
   const {} = useProductDetail(productSlug);
 
   useEffect(() => {
-    const token = localStorage.getItem("auth_token");
+    const token = localStorage.getItem("auth_token"); // sẽ thay đổi thành cookie sau này để login
     setIsLoggedIn(!!token);
   }, []);
 
@@ -217,7 +148,7 @@ export default function ProductDetailTemplate() {
 
           {/* Comment list */}
           <div className={styles.comments_list}>
-            {mockComments.map((comment) => (
+            {pagedComments.map((comment) => (
               <div key={comment._id} className={styles.comment_item}>
                 <div className={styles.comment_header}>
                   <div className={styles.comment_avatar}>
@@ -248,6 +179,46 @@ export default function ProductDetailTemplate() {
               </div>
             ))}
           </div>
+
+          {/* Pagination */}
+          {totalCommentPages > 1 && (
+            <div className={styles.comments_pagination}>
+              <button
+                className={classNames(styles.pagination_btn, {
+                  [styles.pagination_btn_disabled]: commentPage === 1,
+                })}
+                onClick={() => setCommentPage((p) => Math.max(1, p - 1))}
+                disabled={commentPage === 1}
+              >
+                &#8592;
+              </button>
+
+              {Array.from({ length: totalCommentPages }).map((_, i) => (
+                <button
+                  key={i}
+                  className={classNames(styles.pagination_btn, {
+                    [styles.pagination_btn_active]: commentPage === i + 1,
+                  })}
+                  onClick={() => setCommentPage(i + 1)}
+                >
+                  {i + 1}
+                </button>
+              ))}
+
+              <button
+                className={classNames(styles.pagination_btn, {
+                  [styles.pagination_btn_disabled]:
+                    commentPage === totalCommentPages,
+                })}
+                onClick={() =>
+                  setCommentPage((p) => Math.min(totalCommentPages, p + 1))
+                }
+                disabled={commentPage === totalCommentPages}
+              >
+                &#8594;
+              </button>
+            </div>
+          )}
 
           {/* Comment form or login */}
           <div className={styles.comments_action}>

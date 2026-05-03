@@ -15,7 +15,7 @@ export type BlogsResponse = {
 
 export type BlogResponse = {
   data: Blog;
-}
+};
 
 export interface Pagination {
   page: number;
@@ -143,9 +143,23 @@ export interface Cart {
   items: CartItem[];
 }
 
-
 export interface Categories {
   _id: string;
   name: string;
   slug: string;
+}
+
+export interface Comment {
+  _id: string;
+  productId: string;
+  userId: {
+    _id: string;
+    fullName: string;
+    email: string;
+  };
+  content: string;
+  rating: number;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
 }

@@ -427,14 +427,51 @@
 }
 
 .comments_login_btn.comments_login_btn {
-  background: #1c1c1c;
-  color: $white-01;
-  padding: 12px 30px;
-  font-size: 1.5rem;
-  border: none;
-  cursor: pointer;
+  max-width: 200px;
+  justify-content: center;
+}
 
-  &:hover {
-    background: #000;
+.comments_pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 40px;
+}
+
+.pagination_btn {
+  min-width: 38px;
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid $orange-04;
+  background: $white-01;
+  color: #1c1c1c;
+  font-size: 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: $font-nunito;
+
+  &:hover:not(:disabled) {
+    background: $orange-03;
+    border-color: $orange-03;
+    color: $white-01;
   }
+}
+
+.pagination_btn_active {
+  background: #1c1c1c;
+  border-color: #1c1c1c;
+  color: $white-01;
+
+  &:hover:not(:disabled) {
+    background: #000;
+    border-color: #000;
+    color: $white-01;
+  }
+}
+
+.pagination_btn_disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
